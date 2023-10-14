@@ -4,46 +4,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="106dp"
-        android:layout_height="42dp"
-        android:text="Student No:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.457"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.206" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="178dp"
-        android:layout_height="50dp"
-        android:text="Button"
-        tools:layout_editor_absoluteX="361dp"
-        tools:layout_editor_absoluteY="1118dp" />
-
-    <FrameLayout
-        android:layout_width="798dp"
-        android:layout_height="590dp"
-        android:background="#3082A6"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="452dp">
-
-    </FrameLayout>
-
-    <EditText
-        android:id="@+id/editTextText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Name"
-        tools:layout_editor_absoluteX="329dp"
-        tools:layout_editor_absoluteY="317dp" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".MainActivity"/>
 
