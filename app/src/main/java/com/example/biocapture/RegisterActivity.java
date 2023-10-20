@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // Retrofit instance
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://localhost:3000/") // Replace with your API's base URL
+                        .baseUrl("working on this") // Replace with API's base URL
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
@@ -62,14 +62,11 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
                             // HTTP request was successful, and the server returned a valid response
-                            // You can update your UI or show a success message here
-
                             // Example: Show a success toast message
                             Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                         } else {
                             // The server returned an unsuccessful response
                             // Handle specific error cases or show an error message
-                            // Example: Show an error message based on the response code
                             int responseCode = response.code();
                             switch (responseCode) {
                                 case 400:
@@ -88,12 +85,12 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
                         // An error occurred during the HTTP request
-                        // You can handle network errors, timeouts, or other issues here
+                        // handle network errors, timeouts, or other issues here
 
-                        // Example: Show an error toast message
+                        //Show an error toast message
                         Toast.makeText(RegisterActivity.this, "Registration failed. Please check your network connection.", Toast.LENGTH_SHORT).show();
 
-                        // You can also log the error for debugging purposes
+                        // log the error for debugging purposes
                         Log.e("NetworkError", "Error: " + t.getMessage());
                     }
                 });
