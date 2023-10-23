@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // Retrofit instance
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("working on this") // Replace with API's base URL
+                        .baseUrl("http://localhost:5223") // Replace with API's base URL
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
@@ -61,22 +61,23 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            // HTTP request was successful, and the server returned a valid response
-                            // Example: Show a success toast message
+                            // The request was successful
                             Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                         } else {
-                            // The server returned an unsuccessful response
-                            // Handle specific error cases or show an error message
+                            // The request failed
                             int responseCode = response.code();
                             switch (responseCode) {
                                 case 400:
                                     // Handle a specific error (e.g., validation error)
+                                    Toast.makeText(RegisterActivity.this, "Registration failed: " + response.message(), Toast.LENGTH_SHORT).show();
                                     break;
                                 case 500:
                                     // Handle a server error
+                                    Toast.makeText(RegisterActivity.this, "Server error: " + response.message(), Toast.LENGTH_SHORT).show();
                                     break;
                                 default:
                                     // Handle other cases
+                                    Toast.makeText(RegisterActivity.this, "Registration failed with status code: " + responseCode, Toast.LENGTH_SHORT).show();
                                     break;
                             }
                         }

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         if(item.getItemId()==R.id.verify)
         {
             Intent intent =new Intent(this, VerifyActivity.class);
-            startActivities(new Intent[]{intent});
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

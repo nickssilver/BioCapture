@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BioCapture</string>
+    <string name="editTextClass_contentDescription">Class input field</string>
+    <string name="editTextDepartment_contentDescription">Department input field</string>
+    <string name="editTextCourse_contentDescription">Course input field</string>
+    <string name="editTextStatus_contentDescription">Status input field</string>
+    <string name="editTextStudentname_contentDescription">Student Name input field</string>
+
 </resources>
