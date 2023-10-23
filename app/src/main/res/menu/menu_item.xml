@@ -7,10 +7,15 @@
             android:icon="@drawable/baseline_menu_24">
                 <menu>
                         <item
-                android:id="@+id/verify"
-                android:title="Verify"
-                app:showAsAction="never"
-                android:icon="@drawable/baseline_verified_user_24"/>
+                                    android:id="@+id/register"
+                                    android:title="Register"
+                                    app:showAsAction="never"
+                                    android:icon="@drawable/baseline_app_registration_24"/>
+                        <item
+                                android:id="@+id/verify"
+                                android:title="Verify"
+                                app:showAsAction="never"
+                                android:icon="@drawable/baseline_verified_user_24"/>
 
                 </menu>
         </item>
