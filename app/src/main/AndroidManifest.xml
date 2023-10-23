@@ -17,13 +17,14 @@
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
+            android:theme = "@style/Theme.Design.Light"
             android:exported="false" />
         <activity
             android:name=".VerifyActivity"
+            android:theme = "@style/Theme.Design.Light"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
-            android:theme = "@style/Theme.Design.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

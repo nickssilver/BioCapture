@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <item
+            app:showAsAction="always"
+            android:title=""
+            android:icon="@drawable/baseline_menu_24">
+                <menu>
+                        <item
+                android:id="@+id/verify"
+                android:title="Verify"
+                app:showAsAction="never"
+                android:icon="@drawable/baseline_verified_user_24"/>
+
+                </menu>
+        </item>
+</menu>

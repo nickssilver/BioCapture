@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class VerifyActivity extends AppCompatActivity {
+public class VerifyActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
