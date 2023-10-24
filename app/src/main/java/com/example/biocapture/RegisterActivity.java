@@ -1,17 +1,10 @@
 package com.example.biocapture;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import api.ApiService;
 import retrofit2.Call;
@@ -35,7 +28,7 @@ public class RegisterActivity extends BaseActivity {
         studentNumberEditText = findViewById(R.id.editTextStudentNo);
         studentNameEditText = findViewById(R.id.editTextStudentName);
         courseEditText = findViewById(R.id.editTextCourse);
-        departmentEditText = findViewById(R.id.editTextDepartment);
+        departmentEditText = findViewById(R.id.editTextArrears);
         statusEditText = findViewById(R.id.editTextStatus);
         classEditText = findViewById(R.id.editTextClass);
         submitButton = findViewById(R.id.buttonSubmitReg);
