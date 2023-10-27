@@ -3,21 +3,14 @@ package com.example.biocapture;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import api.ApiService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import android.util.Log;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class RegisterActivity extends BaseActivity {
-
-    EditText studentNumberEditText, studentNameEditText, courseEditText, departmentEditText, statusEditText, classEditText;
-    Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,77 +18,38 @@ public class RegisterActivity extends BaseActivity {
         setContentView(R.layout.activity_register);
 
         // UI elements
-        studentNumberEditText = findViewById(R.id.editTextStudentNo);
-        studentNameEditText = findViewById(R.id.editTextStudentName);
-        courseEditText = findViewById(R.id.editTextCourse);
-        departmentEditText = findViewById(R.id.editTextArrears);
-        statusEditText = findViewById(R.id.editTextStatus);
-        classEditText = findViewById(R.id.editTextClass);
-        submitButton = findViewById(R.id.buttonSubmitReg);
+        TextView StudentId = (TextView) findViewById(R.id.editTextStudentId);
+        TextView StudentName = (TextView) findViewById(R.id.editTextStudentName);
+        TextView ClassId = (TextView) findViewById(R.id.editTextClassId);
+        TextView Status = (TextView) findViewById(R.id.editTextStatus);
+        TextView Arrears = (TextView) findViewById(R.id.editTextArrears);
+        TextView Fingerprint1 = (TextView) findViewById(R.id.fingerPrint1);
+        TextView Fingerprint2 = (TextView) findViewById(R.id.fingerPrint2);
+        Button submitButton = (Button) findViewById(R.id.buttonSubmitReg);
 
-        //event listener for the submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get user input from UI elements
-                String studentNumber = studentNumberEditText.getText().toString();
-                String studentName = studentNameEditText.getText().toString();
-                String course = courseEditText.getText().toString();
-                String department = departmentEditText.getText().toString();
-                String status = statusEditText.getText().toString();
-                String classValue = classEditText.getText().toString();
+                // Get the connection to the database
+                Connection connection = MainActivity.connectionclass();
 
-                // Retrofit instance
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://localhost:5223") // Replace with API's base URL
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                // API service interface
-                ApiService apiService = retrofit.create(ApiService.class);
-
-                // Make an API call to send the data
-                Call<Void> call = apiService.registerStudent(studentNumber, studentName, course, department, status, classValue);
-
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            // The request was successful
-                            Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // The request failed
-                            int responseCode = response.code();
-                            switch (responseCode) {
-                                case 400:
-                                    // Handle a specific error (e.g., validation error)
-                                    Toast.makeText(RegisterActivity.this, "Registration failed: " + response.message(), Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 500:
-                                    // Handle a server error
-                                    Toast.makeText(RegisterActivity.this, "Server error: " + response.message(), Toast.LENGTH_SHORT).show();
-                                    break;
-                                default:
-                                    // Handle other cases
-                                    Toast.makeText(RegisterActivity.this, "Registration failed with status code: " + responseCode, Toast.LENGTH_SHORT).show();
-                                    break;
-                            }
-                        }
+                // Use the connection to the database to insert data into the database
+                if (connection != null) {
+                    String sqlinsert = "Insert into Biometrics values ('" + StudentId.getText().toString() + "','" + StudentName.getText().toString() + "','" + ClassId.getText().toString() + "','" + Status.getText().toString() + "'," + Arrears.getText().toString() + ",'" + Fingerprint2.getText().toString() + "')";
+                    Statement st = null;
+                    try {
+                        st = connection.createStatement();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
                     }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        // An error occurred during the HTTP request
-                        // handle network errors, timeouts, or other issues here
-
-                        //Show an error toast message
-                        Toast.makeText(RegisterActivity.this, "Registration failed. Please check your network connection.", Toast.LENGTH_SHORT).show();
-
-                        // log the error for debugging purposes
-                        Log.e("NetworkError", "Error: " + t.getMessage());
+                    try {
+                        ResultSet rs = st.executeQuery(sqlinsert);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
                     }
-                });
+                }
             }
         });
+
     }
 }
