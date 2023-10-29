@@ -3,6 +3,8 @@ package com.example.biocapture;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +25,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class RegisterActivity extends BaseActivity {
 
     EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, fingerPrint1EditText, fingerPrint2EditText;
@@ -35,8 +36,6 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
-
         studentIdEditText = findViewById(R.id.editTextStudentId);
         studentNameEditText = findViewById(R.id.editTextStudentName);
         classIdEditText = findViewById(R.id.editTextClassId);
@@ -47,11 +46,49 @@ public class RegisterActivity extends BaseActivity {
         submitButton = findViewById(R.id.buttonSubmitReg);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.88.192:5223/api/")
+                .baseUrl("http://10.0.2.2:5223/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         apiService = retrofit.create(ApiService.class);
+
+        // Add a TextWatcher to the studentIdEditText field
+        studentIdEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // This method is intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // This method is intentionally left blank
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    Call<FetchStudentData> call = apiService.FetchStudentData(s.toString());
+                    call.enqueue(new Callback<FetchStudentData>() {
+                        @Override
+                        public void onResponse(Call<FetchStudentData> call, Response<FetchStudentData> response) {
+                            if (response.isSuccessful()) {
+                                FetchStudentData studentData = response.body();
+                                // Use the student data to fill the other fields
+                                studentNameEditText.setText(studentData.getNames());
+                                classIdEditText.setText(studentData.getTheClass());
+                                statusEditText.setText(studentData.getStudStatus());
+                                arrearsEditText.setText(String.valueOf(studentData.getArrears()));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<FetchStudentData> call, Throwable t) {
+                            // Handle the failure
+                        }
+                    });
+                }
+            }
+        });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,9 +101,6 @@ public class RegisterActivity extends BaseActivity {
                     Toast.makeText(RegisterActivity.this, "No internet connection. Please try again.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-
-
 
                 if (studentIdEditText.getText().toString().isEmpty() ||
                         studentNameEditText.getText().toString().isEmpty() ||
@@ -138,9 +172,9 @@ public class RegisterActivity extends BaseActivity {
                             Toast.makeText(RegisterActivity.this, "An unexpected error occurred. Please try again later.", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                 });
             }
         });
     }
 }
+
