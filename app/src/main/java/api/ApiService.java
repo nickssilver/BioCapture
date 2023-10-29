@@ -14,10 +14,10 @@ public interface ApiService {
     @Headers({
             "Content-Type: application/json"
     })
-    @POST("Registration") // actual endpoint on your server
+    @POST("Registration") // actual endpoint on your server registration
     Call<Void> registerStudent(@Body RegisterStudentRequest request);
 
-    @GET("Registration/{studentId}")
+    @GET("Registration/{studentId}") //actual endpoint on your server on get student data
     Call<FetchStudentData> FetchStudentData(@Path("studentId") String studentId);
 
 }

@@ -46,7 +46,7 @@ public class RegisterActivity extends BaseActivity {
         submitButton = findViewById(R.id.buttonSubmitReg);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:5223/api/")
+                .baseUrl("http://192.168.88.192:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -141,7 +141,7 @@ public class RegisterActivity extends BaseActivity {
                         if (response.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(RegisterActivity.this, "Registration failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Registration faled: " + response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

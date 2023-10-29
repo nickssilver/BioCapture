@@ -9,12 +9,12 @@ public class FetchStudentData {
 
     // Getters and setters for each field...
 
-    public String getAdmnNo() {
+    public String getAdminNo() {
         return AdmnNo;
     }
 
-    public void setAdmnNo(String admnNo) {
-        AdmnNo = admnNo;
+    public void setAdmnNo(String AdmnNo) {
+        this.AdmnNo = AdmnNo;
     }
 
     public String getNames() {
@@ -29,23 +29,23 @@ public class FetchStudentData {
         return Class;
     }
 
-    public void setTheClass(String aClass) {
-        Class = aClass;
+    public void setTheClass(String Class) {
+        this.Class = Class;
     }
 
     public String getStudStatus() {
         return StudStatus;
     }
 
-    public void setStudStatus(String studStatus) {
-        StudStatus = studStatus;
+    public void setStudStatus(String StudStatus) {
+        this.StudStatus = StudStatus;
     }
 
     public double getArrears() {
         return Arrears;
     }
 
-    public void setArrears(double arrears) {
-        Arrears = arrears;
+    public void setArrears(double Arrears) {
+        this.Arrears = Arrears;
     }
 }
