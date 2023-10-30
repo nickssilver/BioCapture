@@ -1,10 +1,17 @@
 package com.example.biocapture;
 
+import com.google.gson.annotations.SerializedName;
+
 public class FetchStudentData {
+    @SerializedName("admnNo")
     private String AdmnNo; // StudentId
+    @SerializedName("names")
     private String names; // StudentName
+    @SerializedName("class")
     private String Class; // ClassId
+    @SerializedName("studStatus")
     private String StudStatus; // Status
+    @SerializedName("arrears")
     private double Arrears; // Arrears
 
     // Getters and setters for each field...

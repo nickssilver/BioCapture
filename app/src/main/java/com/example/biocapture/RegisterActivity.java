@@ -67,6 +67,12 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!s.toString().isEmpty()) {
+                    // Clear all of the fields
+                    studentNameEditText.setText("");
+                    classIdEditText.setText("");
+                    statusEditText.setText("");
+                    arrearsEditText.setText("");
+
                     Call<FetchStudentData> call = apiService.FetchStudentData(s.toString());
                     call.enqueue(new Callback<FetchStudentData>() {
                         @Override
