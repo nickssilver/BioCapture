@@ -28,8 +28,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RegisterActivity extends BaseActivity {
 
     EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, fingerPrint1EditText, fingerPrint2EditText;
-    Button submitButton;
+    Button captureButton, submitButton;
     ApiService apiService;
+
+    MorphoSmartFingerprintCapture morphoSmartFingerprintCapture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class RegisterActivity extends BaseActivity {
         arrearsEditText = findViewById(R.id.editTextArrears);
         fingerPrint1EditText = findViewById(R.id.fingerPrint1);
         fingerPrint2EditText = findViewById(R.id.fingerPrint2);
+        captureButton = findViewById(R.id.captureButton);
         submitButton = findViewById(R.id.buttonSubmitReg);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -95,6 +98,22 @@ public class RegisterActivity extends BaseActivity {
                 }
             }
         });
+        // Create a counter to track which finger is being captured
+        int fingerCounter = 0;
+
+        morphoSmartFingerprintCapture = new MorphoSmartFingerprintCapture();
+
+        captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start capturing two fingerprints
+                String[] fingerprints = morphoSmartFingerprintCapture.captureTwoFingerprints();
+                fingerPrint1EditText.setText(fingerprints[0]);
+                fingerPrint2EditText.setText(fingerprints[1]);
+            }
+        });
+
+
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +166,7 @@ public class RegisterActivity extends BaseActivity {
                         if (response.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(RegisterActivity.this, "Registration faled: " + response.message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Registration failed: " + response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -180,7 +199,13 @@ public class RegisterActivity extends BaseActivity {
                     }
                 });
             }
-        });
+        });}
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        morphoSmartFingerprintCapture.closeDevice();
     }
-}
+    }
+
 
