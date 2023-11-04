@@ -14,5 +14,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "BioCapture"
-include(":app")
+include(":app", ":MorphoLiveScan", ":MorphoSmart_SDK_6.42.0.0")
  

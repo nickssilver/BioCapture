@@ -1,26 +1,25 @@
 package com.example.biocapture;
 
-import com.morpho.smart.api.MorphoDevice;
-import com.morpho.smart.api.eCaptureType;
-import com.morpho.smart.api.eMlsError;
-import com.morpho.smart.api.MorphoDevice;
-import com.morpho.smart.api.MSO_Secu;
+import com.idemia.morpholivescan.MorphoLiveScan;
+import com.idemia.morpholivescan.MorphoImage;
+import com.idemia.morpholivescan.eCaptureType;
+import com.idemia.morpholivescan.eMlsError;
 
 public class MorphoSmartFingerprintCapture {
 
-    private MorphoDevice morphoDevice;
+    private MorphoLiveScan morphoLiveScan;
 
     public MorphoSmartFingerprintCapture() {
-        morphoDevice = MorphoDevice.getInstance();
-        morphoDevice.open();
+        morphoLiveScan = new MorphoLiveScan(this.getApplicationContext());
+        morphoLiveScan.start();
     }
 
-    public String[] captureTwoFingerprints() {
+    public MorphoImage[] captureTwoFingerprints() {
         // Start capturing two fingerprints
-        morphoDevice.startCapture(eCaptureType.CTYPE_TWO_FINGERS, 0, false);
+        morphoLiveScan.startCapture(eCaptureType.CTYPE_TWO_FINGERS, 0, false);
 
         // Wait for the capture process to finish
-        while (!morphoDevice.isCaptureDone()) {
+        while (!morphoLiveScan.isCaptureDone()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -33,13 +32,13 @@ public class MorphoSmartFingerprintCapture {
         }
 
         // Get the captured fingerprint images
-        String fingerprint1 = morphoDevice.getFingerprintImage(0);
-        String fingerprint2 = morphoDevice.getFingerprintImage(1);
+        MorphoImage fingerprint1 = morphoLiveScan.getFingerprintImage(0);
+        MorphoImage fingerprint2 = morphoLiveScan.getFingerprintImage(1);
 
-        return new String[]{fingerprint1, fingerprint2};
+        return new MorphoImage[]{fingerprint1, fingerprint2};
     }
 
     public void closeDevice() {
-        morphoDevice.close();
+        morphoLiveScan.destroy();
     }
 }
