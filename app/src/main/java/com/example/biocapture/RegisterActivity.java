@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.morpho.morphosmart.sdk.MorphoImage;
+
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -107,9 +109,9 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // Start capturing two fingerprints
-                String[] fingerprints = morphoSmartFingerprintCapture.captureTwoFingerprints();
-                fingerPrint1EditText.setText(fingerprints[0]);
-                fingerPrint2EditText.setText(fingerprints[1]);
+                MorphoImage[] fingerprints = morphoSmartFingerprintCapture.captureTwoFingerprints();
+                fingerPrint1EditText.setText(fingerprints[0].toString());
+                fingerPrint2EditText.setText(fingerprints[1].toString());
             }
         });
 

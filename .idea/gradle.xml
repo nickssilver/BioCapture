@@ -11,6 +11,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/MorphoLiveScan" />
+            <option value="$PROJECT_DIR$/MorphoSmart_SDK_6.42.0.0" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

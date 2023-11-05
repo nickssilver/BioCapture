@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('MorphoSmart_SDK_6.42.0.0.jar'))

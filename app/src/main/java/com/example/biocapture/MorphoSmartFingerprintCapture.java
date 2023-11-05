@@ -1,16 +1,15 @@
 package com.example.biocapture;
 
-import com.idemia.morpholivescan.MorphoLiveScan;
-import com.idemia.morpholivescan.MorphoImage;
-import com.idemia.morpholivescan.eCaptureType;
-import com.idemia.morpholivescan.eMlsError;
+import static com.morpho.android.usb.USBManager.context;
+
+import com.morpho.morphosmart.sdk.MorphoImage;
 
 public class MorphoSmartFingerprintCapture {
 
-    private MorphoLiveScan morphoLiveScan;
+    private com.idemia.morpholivescan.MorphoLiveScan morphoLiveScan;
 
     public MorphoSmartFingerprintCapture() {
-        morphoLiveScan = new MorphoLiveScan(this.getApplicationContext());
+        morphoLiveScan = new com.idemia.morpholivescan.MorphoLiveScan(context);
         morphoLiveScan.start();
     }
 
@@ -27,7 +26,7 @@ public class MorphoSmartFingerprintCapture {
                 e.printStackTrace();
                 // Close the Morpho device and throw an eMlsError exception
                 closeDevice();
-                throw new eMlsError();
+                throw new com.idemia.morpholivescan.eMlsError();
             }
         }
 
