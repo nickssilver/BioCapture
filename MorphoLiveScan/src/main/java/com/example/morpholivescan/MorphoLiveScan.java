@@ -1,27 +1,60 @@
-package com.idemia.morpholivescan;
+package com.example.morpholivescan;
+
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_DEVICE_CLOSE_FAILED;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_DEVICE_CONNECTED;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_DEVICE_DISCONNECTED;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_DEVICE_INIT_FAILED;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_DEVICE_NOT_FOUND;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_DEVICE_OPEN_FAILED;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_DEVICE_PERMISSION_DENIED;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_DEVICE_RECONNECTING;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_INVALID_CAPTURE_STATE;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_RESULT_UPDATE;
+import static com.example.morpholivescan.CallbackMessage.eMsgType.MSG_UPDATE_IMAGE;
+import static com.example.morpholivescan.eCaptureMode.CMODE_AUTO_CAP;
+import static com.example.morpholivescan.eCaptureState.CSTATE_CAPTURED;
+import static com.example.morpholivescan.eCaptureState.CSTATE_FINISHED;
+import static com.example.morpholivescan.eCaptureState.CSTATE_IDLE;
+import static com.example.morpholivescan.eCaptureState.CSTATE_PREVIEW;
+import static com.example.morpholivescan.eCaptureState.CSTATE_UNKNOWN;
+import static com.example.morpholivescan.eMlsError.MLS_CLOSE_FAILED;
+import static com.example.morpholivescan.eMlsError.MLS_INIT_FAILED;
+import static com.example.morpholivescan.eMlsError.MLS_INIT_THREAD_BAD_STATE;
+import static com.example.morpholivescan.eMlsError.MLS_INIT_THREAD_START_FAILED;
+import static com.example.morpholivescan.eMlsError.MLS_INVALID_VIDEO_SIZE;
+import static com.example.morpholivescan.eMlsError.MLS_NOERROR;
+import static com.example.morpholivescan.eMlsError.MLS_OPEN_FAILED;
+import static com.example.morpholivescan.eMlsError.MLS_RESETTING_SENSOR;
+import static com.example.morpholivescan.eMlsError.MLS_SENSOR_DISCONNECTED;
+import static com.example.morpholivescan.eMlsError.MLS_SENSOR_INVALID_STATE;
+import static com.example.morpholivescan.eMlsError.MLS_SENSOR_NOT_FOUND;
+import static com.example.morpholivescan.eMlsError.MLS_SENSOR_UNAVAILABLE;
+import static com.example.morpholivescan.eMlsError.MLS_START_CAPTURE_FAILED;
+import static com.example.morpholivescan.eMlsError.MLS_STOP_CAPTURE_FAILED;
+import static com.example.morpholivescan.eMlsError.MLS_TERM_FAILED;
+import static com.example.morpholivescan.eMlsError.MLS_TPAPI_DAMAGED_DEVICE;
+import static com.example.morpholivescan.eMlsError.MLS_TPAPI_INVALIDSTATE;
+import static com.example.morpholivescan.eMlsError.MLS_TPAPI_TOOMANYDEVICES;
+import static com.example.morpholivescan.eMlsError.MLS_UNKNOWN_ERROR;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbManager;
-import android.hardware.usb.UsbConstants;
-import android.hardware.usb.UsbDeviceConnection;
 import android.graphics.Bitmap;
+import android.hardware.usb.UsbConstants;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbManager;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 import androidx.annotation.Keep;
 
-import com.idemia.morpholivescan.CallbackMessage.eMsgType;
-import static com.idemia.morpholivescan.CallbackMessage.eMsgType.*;
-import static com.idemia.morpholivescan.eCaptureMode.*;
-import static com.idemia.morpholivescan.eCaptureState.*;
-import static com.idemia.morpholivescan.eMlsError.*;
-import static com.idemia.morpholivescan.eMlsError.MLS_TPAPI_DAMAGED_DEVICE;
+import com.example.morpholivescan.CallbackMessage.eMsgType;
+import com.example.morpholivescan.tpDevList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,7 +69,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MorphoLiveScan extends Observable {
     private String TAG = "MorphoLiveScan";
-    private static final String ACTION_USB_PERMISSION = "com.idemia.morpholivescan.USB_PERMISSION";
+    private static final String ACTION_USB_PERMISSION = "com.example.morpholivescan.USB_PERMISSION";
 
     private boolean g_initialized = false;
     private boolean g_wait_device_open = false;
@@ -48,7 +81,7 @@ public class MorphoLiveScan extends Observable {
     private int g_connection_status = 0;
 
     private tpDevList[] mDevList = null;
-    private tpDevList mWorkingDevice = null;
+    private com.example.morpholivescan.tpDevList mWorkingDevice = null;
     private eCaptureState mCapState = CSTATE_IDLE;
     private Bitmap mDisplay = null;
     private Bitmap mSave = null;

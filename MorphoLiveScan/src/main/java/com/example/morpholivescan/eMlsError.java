@@ -1,7 +1,6 @@
-package com.idemia.morpholivescan;
+package com.example.morpholivescan;
 
-public enum eMlsError
-{
+public enum eMlsError extends Throwable {
     MLS_NOERROR                                     (0),    /**< Success */
     MLS_UNKNOWN_ERROR                               (-1),
     /** MorphoLiveScan Java library Error Codes */

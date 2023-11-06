@@ -27,7 +27,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity implements MorphoSmartFingerprintCapture.CaptureObserver {
 
     EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, fingerPrint1EditText, fingerPrint2EditText;
     Button captureButton, submitButton;
@@ -103,17 +103,20 @@ public class RegisterActivity extends BaseActivity {
         // Create a counter to track which finger is being captured
         int fingerCounter = 0;
 
-        morphoSmartFingerprintCapture = new MorphoSmartFingerprintCapture();
+        morphoSmartFingerprintCapture = new MorphoSmartFingerprintCapture(this);
+        morphoSmartFingerprintCapture.registerObserver(this);
+
 
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Start capturing two fingerprints
-                MorphoImage[] fingerprints = morphoSmartFingerprintCapture.captureTwoFingerprints();
-                fingerPrint1EditText.setText(fingerprints[0].toString());
-                fingerPrint2EditText.setText(fingerprints[1].toString());
+                morphoSmartFingerprintCapture.captureTwoFingerprints();
             }
         });
+
+
+
+
 
 
 
@@ -202,11 +205,25 @@ public class RegisterActivity extends BaseActivity {
                 });
             }
         });}
+    @Override
+    public void onCaptureStart() {
+        // This method is intentionally left blank
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         morphoSmartFingerprintCapture.closeDevice();
+    }
+    @Override
+    public void onCaptureComplete(MorphoImage[] fingerprints) {
+        fingerPrint1EditText.setText(fingerprints[0].toString());
+        fingerPrint2EditText.setText(fingerprints[1].toString());
+    }
+
+    @Override
+    public void onCaptureFailure(Exception e) {
+        Toast.makeText(this, "Fingerprint capture failed. Please try again.", Toast.LENGTH_SHORT).show();
     }
     }
 

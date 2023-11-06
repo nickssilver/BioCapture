@@ -1,4 +1,5 @@
-package com.idemia.morpholivescan;
+package com.example.
+        morpholivescan;
 
 public class devInfo {
 

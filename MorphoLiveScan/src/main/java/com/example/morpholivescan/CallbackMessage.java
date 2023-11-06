@@ -1,4 +1,4 @@
-package com.idemia.morpholivescan;
+package com.example.morpholivescan;
 
 public final class CallbackMessage {
     public enum eMsgType {
