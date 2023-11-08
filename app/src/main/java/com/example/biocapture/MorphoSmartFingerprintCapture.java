@@ -109,5 +109,7 @@ public class MorphoSmartFingerprintCapture {
         void onCaptureStart();
         void onCaptureComplete(MorphoImage[] fingerprints);
         void onCaptureFailure(Throwable e);
+
+        void onCaptureFailure(Exception e);
     }
 }

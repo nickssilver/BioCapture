@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.morpholivescan.MorphoLiveScan;
 import com.morpho.morphosmart.sdk.MorphoImage;
+
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -32,13 +34,20 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
     EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, fingerPrint1EditText, fingerPrint2EditText;
     Button captureButton, submitButton;
     ApiService apiService;
-
+    MorphoLiveScan morphoLiveScan;
     MorphoSmartFingerprintCapture morphoSmartFingerprintCapture;
+    int fingerCounter = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        // Initialize the MorphoLiveScan and MorphoSmartFingerprintCapture objects
+        morphoLiveScan = new MorphoLiveScan(this);
+        morphoSmartFingerprintCapture = new MorphoSmartFingerprintCapture(morphoLiveScan);
+        morphoSmartFingerprintCapture.registerObserver(this);
 
         studentIdEditText = findViewById(R.id.editTextStudentId);
         studentNameEditText = findViewById(R.id.editTextStudentName);
@@ -100,26 +109,12 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
                 }
             }
         });
-        // Create a counter to track which finger is being captured
-        int fingerCounter = 0;
-
-        morphoSmartFingerprintCapture = new MorphoSmartFingerprintCapture(this);
-        morphoSmartFingerprintCapture.registerObserver(this);
-
-
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 morphoSmartFingerprintCapture.captureTwoFingerprints();
             }
         });
-
-
-
-
-
-
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,24 +202,54 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
         });}
     @Override
     public void onCaptureStart() {
-        // This method is intentionally left blank
+        fingerCounter++;
+        if (fingerCounter == 1) {
+            Toast.makeText(this, "Capturing first fingerprint...", Toast.LENGTH_SHORT).show();
+        } else if (fingerCounter == 2) {
+            Toast.makeText(this, "Capturing second fingerprint...", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        morphoSmartFingerprintCapture.closeDevice();
-    }
-    @Override
-    public void onCaptureComplete(MorphoImage[] fingerprints) {
-        fingerPrint1EditText.setText(fingerprints[0].toString());
-        fingerPrint2EditText.setText(fingerprints[1].toString());
+        if (morphoLiveScan != null) {
+            morphoLiveScan.destroy();
+        }
     }
 
     @Override
+    public void onCaptureComplete(MorphoImage[] fingerprints) {
+        if (fingerCounter == 1) {
+            // Convert the MorphoImage to a byte array
+            byte[] fingerprint1byte = fingerprints[0].getImage();
+            String fingerprint1 = Base64.encodeToString(fingerprint1byte, Base64.DEFAULT);
+            fingerPrint1EditText.setText(fingerprint1);
+        } else if (fingerCounter == 2) {
+            // Convert the MorphoImage to a byte array
+            byte[] fingerprint2byte = fingerprints[1].getImage();
+            String fingerprint2 = Base64.encodeToString(fingerprint2byte, Base64.DEFAULT);
+            fingerPrint2EditText.setText(fingerprint2);
+        }
+        fingerCounter = 0;
+    }
+
+
+    @Override
+    public void onCaptureFailure(Throwable e) {
+
+    }
+
+
+    @Override
     public void onCaptureFailure(Exception e) {
+        // Handle the failure
         Toast.makeText(this, "Fingerprint capture failed. Please try again.", Toast.LENGTH_SHORT).show();
+        fingerCounter = 0;
+
     }
-    }
+
+
+}
 
 
