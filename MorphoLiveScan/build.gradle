@@ -4,7 +4,6 @@ android {
     compileSdkVersion 33
     namespace = "com.example.morpholivescan"
 
-
     defaultConfig {
         minSdkVersion 29
         targetSdkVersion 33
@@ -26,10 +25,6 @@ android {
     }
 
     buildTypes {
-        debug {
-            debuggable true
-        }
-
         release {
             minifyEnabled false
         }

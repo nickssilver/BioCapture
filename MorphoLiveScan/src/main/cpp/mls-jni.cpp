@@ -22,33 +22,33 @@ int FngExpected = 0;
 eCaptureType mCapType;
 
 JNIEXPORT void JNICALL
-Java_com_example_morpholivescan_MorphoLiveScan_SetFingersBox(JNIEnv *env, jobject, jboolean fingersBox)
+Java_com_idemia_morpholivescan_MorphoLiveScan_SetFingersBox(JNIEnv *env, jobject, jboolean fingersBox)
 {
     FingersBox = (bool)fingersBox;
     return;
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_example_morpholivescan_MorphoLiveScan_InitializeAPI(JNIEnv *env, jobject)
+Java_com_idemia_morpholivescan_MorphoLiveScan_InitializeAPI(JNIEnv *env, jobject)
 {
     return TP_InitializeAPI(env);
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_example_morpholivescan_MorphoLiveScan_TerminateAPI(JNIEnv *env, jobject)
+Java_com_idemia_morpholivescan_MorphoLiveScan_TerminateAPI(JNIEnv *env, jobject)
 {
     return TP_TerminateAPI();
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_com_example_morpholivescan_MorphoLiveScan_GetAndroidDeviceList(JNIEnv *env, jobject)
+Java_com_idemia_morpholivescan_MorphoLiveScan_GetAndroidDeviceList(JNIEnv *env, jobject)
 {
     U32 NumDev = 1;
     jobjectArray jDevList;
     struct s_tpDevList pList[NumDev];
     long ret = TP_GetAndroidDeviceList(&NumDev, pList, env);
     if(ret == 0) {
-        jclass cls = env->FindClass("com/example/morpholivescan/tpDevList");
+        jclass cls = env->FindClass("com/idemia/morpholivescan/tpDevList");
         jmethodID mid = env->GetMethodID(cls, "<init>",
                                          "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V");
         jDevList = env->NewObjectArray(NumDev, cls, 0);
@@ -77,15 +77,15 @@ Java_com_example_morpholivescan_MorphoLiveScan_GetAndroidDeviceList(JNIEnv *env,
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_example_morpholivescan_MorphoLiveScan_OpenDeviceSN(JNIEnv *env, jobject, jobject tpDevice)
+Java_com_idemia_morpholivescan_MorphoLiveScan_OpenDeviceSN(JNIEnv *env, jobject, jobject tpDevice)
 {
-    jmethodID getSN = env->GetMethodID(env->FindClass("com/example/morpholivescan/tpDevList"),
+    jmethodID getSN = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/tpDevList"),
                                                 "getAssy_sn", "()Ljava/lang/String;");
-    jmethodID getLibType = env->GetMethodID(env->FindClass("com/example/morpholivescan/tpDevList"),
+    jmethodID getLibType = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/tpDevList"),
                                        "getLibType", "()I");
-    jmethodID getHdl = env->GetMethodID(env->FindClass("com/example/morpholivescan/tpDevList"),
+    jmethodID getHdl = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/tpDevList"),
                                             "getHandel", "()I");
-    jmethodID setHdl = env->GetMethodID(env->FindClass("com/example/morpholivescan/tpDevList"),
+    jmethodID setHdl = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/tpDevList"),
                                             "setHandel", "(I)V");
     jint jlibType = env->CallIntMethod(tpDevice,getLibType);
     jstring jSN = (jstring)env->CallObjectMethod(tpDevice,getSN);
@@ -130,13 +130,13 @@ Java_com_idemia_morpholivescan_MorphoLiveScan_GetDeviceInfo(JNIEnv *env, jobject
         return ret;
     }
 
-    jmethodID setMake = env->GetMethodID(env->FindClass("com/example/morpholivescan/devInfo"),
+    jmethodID setMake = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/devInfo"),
                                        "setAssy_make", "(Ljava/lang/String;)V");
-    jmethodID setModel = env->GetMethodID(env->FindClass("com/example/morpholivescan/devInfo"),
+    jmethodID setModel = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/devInfo"),
                                        "setAssy_model", "(Ljava/lang/String;)V");
-    jmethodID setSN = env->GetMethodID(env->FindClass("com/example/morpholivescan/devInfo"),
+    jmethodID setSN = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/devInfo"),
                                        "setAssy_sn", "(Ljava/lang/String;)V");
-    jmethodID setVersion = env->GetMethodID(env->FindClass("com/example/morpholivescan/devInfo"),
+    jmethodID setVersion = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/devInfo"),
                                        "setSw_version", "(Ljava/lang/String;)V");
     if(setMake)
     {
@@ -185,7 +185,7 @@ Java_com_idemia_morpholivescan_MorphoLiveScan_GetMaxVideoSize(JNIEnv *env, jobje
     U16 videoW = 0;
     U16 videoH = 0;
 
-    jmethodID getCaptureType = env->GetMethodID(env->FindClass("com/example/morpholivescan/eCaptureType"),
+    jmethodID getCaptureType = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/eCaptureType"),
                                                 "ordinal", "()I");
     jint value = env->CallIntMethod(jcapType, getCaptureType);
     eCaptureType capType;
@@ -193,9 +193,9 @@ Java_com_idemia_morpholivescan_MorphoLiveScan_GetMaxVideoSize(JNIEnv *env, jobje
 
     long ret = TP_GetMaxVideoSize(hdl,capType,&videoW,&videoH);
 
-    jmethodID setVideoW = env->GetMethodID(env->FindClass("com/example/morpholivescan/imgSize"),
+    jmethodID setVideoW = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/imgSize"),
                                            "setX", "(I)V");
-    jmethodID setVideoH = env->GetMethodID(env->FindClass("com/example/morpholivescan/imgSize"),
+    jmethodID setVideoH = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/imgSize"),
                                            "setY", "(I)V");
     env->CallVoidMethod(jpVidioSize,setVideoW,(jint)videoW);
     env->CallVoidMethod(jpVidioSize,setVideoH,(jint)videoH);
@@ -209,7 +209,7 @@ Java_com_idemia_morpholivescan_MorphoLiveScan_CaptureControl(JNIEnv *env, jobjec
 {
     U32 hdl = (U32)jhdl;
 
-    jmethodID getCapControl = env->GetMethodID(env->FindClass("com/example/morpholivescan/eCapControl"),
+    jmethodID getCapControl = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/eCapControl"),
                                                    "ordinal", "()I");
     jint value = env->CallIntMethod(jcapControl, getCapControl);
     eCapControl capControl;
@@ -227,7 +227,7 @@ Java_com_idemia_morpholivescan_MorphoLiveScan_StartPreview(JNIEnv *env, jobject 
                                                             jstring jimgCallbk)
 {
     U32 hdl = (U32)jhdl;
-    jmethodID getCaptureType = env->GetMethodID(env->FindClass("com/example/morpholivescan/eCaptureType"),
+    jmethodID getCaptureType = env->GetMethodID(env->FindClass("com/idemia/morpholivescan/eCaptureType"),
                                                 "ordinal", "()I");
     jint value = env->CallIntMethod(jcapType, getCaptureType);
     eCaptureType capType;
