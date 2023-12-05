@@ -1,9 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow -->
+    <item>
+        <shape>
+            <gradient
+                android:startColor="#E8FFFFFF"
+                android:centerColor="#00FFFFFF"
+                android:endColor="#A4FFFFFF"
+                android:angle="280"/>
+            <corners android:radius="70dp"/>
+            <padding android:bottom="2dp"  />
+        </shape>
+
+    </item>
+    <!-- Your actual shape -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#0288D1"/>
-            <corners android:radius="50dp"/>
+            <solid android:color="#0288D1" />
+            <corners android:radius="70dp" />
         </shape>
     </item>
-</selector>
+</layer-list>

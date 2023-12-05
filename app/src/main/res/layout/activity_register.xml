@@ -15,45 +15,16 @@
         android:id="@+id/Registration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registration"
+        android:text="REGISTRATION"
         android:textColor="@color/white"
-        android:textSize="45sp"
+        android:textSize="40sp"
         android:textStyle="bold"
+        android:layout_marginTop="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/Student"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Student No:"
-        android:textColor="@color/white"
-        android:textSize="28sp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/Registration"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextStudentId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input_bg"
-        android:ems="10"
-        android:hint="Input No.."
-        android:inputType="text"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:textSize="18sp"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/Student"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <LinearLayout
@@ -64,35 +35,77 @@
         android:background="@drawable/rounded_corners"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/editTextStudentId"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Registration"
+        tools:ignore="MissingConstraints">
+        <TextView
+            android:id="@+id/Student"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Student No"
+            android:textColor="@color/grey"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/Registration"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <EditText
+            android:id="@+id/editTextStudentId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg"
+            android:ems="10"
+            android:hint="Adm No.."
+            android:inputType="text"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textColorHint="@color/black"
+            android:textSize="18sp"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/Student"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="10dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
         <TextView
             android:id="@+id/textViewStudentNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Student Name: "
-            android:textColor="@color/white"
+            android:textColor="@color/grey"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editTextStudentName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/input_bg"
             android:ems="10"
             android:inputType="text"
-            android:hint=".."
+            android:hint="..."
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textViewStudentNo"
             app:layout_constraintTop_toTopOf="parent"
@@ -107,25 +120,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
         <TextView
             android:id="@+id/textViewClassId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Class:"
-            android:textColor="@color/white"
+            android:textColor="@color/grey"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextStudentName" />
 
         <EditText
             android:id="@+id/editTextClassId"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/input_bg"
             android:ems="10"
             android:inputType="text"
             android:hint=".."
+            android:textAlignment="center"
             android:minWidth="48dp"
             android:minHeight="48dp"
             app:layout_constraintStart_toEndOf="@+id/textViewClassId"
@@ -138,26 +157,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
 
         <TextView
             android:id="@+id/textViewStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Status:"
-            android:textColor="@color/white"
+            android:textColor="@color/grey"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextClassId" />
 
         <EditText
             android:id="@+id/editTextStatus"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/input_bg"
             android:ems="10"
             android:inputType="text"
-            android:hint=".."
+            android:hint="..."
+            android:textAlignment="center"
             android:minWidth="48dp"
             android:minHeight="48dp"
             app:layout_constraintStart_toEndOf="@+id/textViewStatus"
@@ -170,25 +195,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
         <TextView
             android:id="@+id/textViewArrears"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Arrears:"
-            android:textColor="@color/white"
+            android:textColor="@color/grey"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextStatus" />
 
         <EditText
             android:id="@+id/editTextArrears"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/input_bg"
             android:ems="10"
             android:inputType="text"
-            android:hint="."
+            android:hint="..."
+            android:textAlignment="center"
             app:layout_constraintStart_toEndOf="@+id/textViewArrears"
             android:minWidth="48dp"
             android:minHeight="48dp"
@@ -202,10 +233,12 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="Add Fingerprints"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/grey"
             android:textSize="28sp"
+            android:textStyle="bold"
             android:layout_gravity="center"
             app:layout_constraintTop_toBottomOf="@+id/editTextArrears"
             app:layout_constraintStart_toStartOf="parent"
@@ -247,7 +280,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Finger1"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -280,7 +313,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Finger2"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -308,16 +341,18 @@
 
         <Button
             android:id="@+id/buttonSubmitReg"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register"
+            android:layout_marginStart="130dp"
+            android:layout_marginEnd="130dp"
+            android:text="Submit"
             android:textColor="@color/white"
             android:background="@drawable/button_background"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"
             android:textAlignment="center"
-            android:textSize="30sp"
-            android:padding="10dp"
+            android:textSize="34sp"
+            app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
