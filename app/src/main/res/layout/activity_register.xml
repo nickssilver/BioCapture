@@ -228,13 +228,12 @@
     </LinearLayout>
 
 
-
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Add Fingerprints"
+            android:text="Fingerprints"
             android:textAlignment="center"
             android:textColor="@color/grey"
             android:textSize="28sp"
@@ -262,26 +261,21 @@
 
                 <EditText
                     android:id="@+id/fingerPrint1"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_bg"
+                    android:drawableTop="@drawable/ic_fingerprint"
                     android:ems="10"
-                    android:hint="Place Finger"
+                    android:hint="First Finger"
                     android:inputType="text"
                     android:padding="10dp"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:minWidth="48dp"
                     android:minHeight="48dp"/>
 
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Finger1"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -295,26 +289,21 @@
 
                 <EditText
                     android:id="@+id/fingerPrint2"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_bg"
+                    android:drawableTop="@drawable/ic_fingerprint"
                     android:ems="10"
-                    android:hint="Place Finger"
+                    android:hint="Second Finger"
                     android:inputType="text"
                     android:padding="10dp"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:minWidth="48dp"
                     android:minHeight="48dp"/>
 
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Finger2"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -330,7 +319,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="20dp"
-            android:textSize="14sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
