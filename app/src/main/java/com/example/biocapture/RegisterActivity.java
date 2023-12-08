@@ -1,21 +1,23 @@
 package com.example.biocapture;
 
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.morpholivescan.MorphoLiveScan;
 import com.morpho.morphosmart.sdk.MorphoImage;
-
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -60,7 +62,7 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
         submitButton = findViewById(R.id.buttonSubmitReg);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.88.192:5223/")
+                .baseUrl("http://192.168.16.64:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -90,10 +92,11 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
                     Call<FetchStudentData> call = apiService.FetchStudentData(s.toString());
                     call.enqueue(new Callback<FetchStudentData>() {
                         @Override
-                        public void onResponse(Call<FetchStudentData> call, Response<FetchStudentData> response) {
+                        public void onResponse(@NonNull Call<FetchStudentData> call, @NonNull Response<FetchStudentData> response) {
                             if (response.isSuccessful()) {
                                 FetchStudentData studentData = response.body();
                                 // Use the student data to fill the other fields
+                                assert studentData != null;
                                 studentNameEditText.setText(studentData.getNames());
                                 classIdEditText.setText(studentData.getTheClass());
                                 statusEditText.setText(studentData.getStudStatus());
@@ -102,7 +105,7 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
                         }
 
                         @Override
-                        public void onFailure(Call<FetchStudentData> call, Throwable t) {
+                        public void onFailure(@NonNull Call<FetchStudentData> call, @NonNull Throwable t) {
                             // Handle the failure
                         }
                     });
@@ -118,14 +121,18 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Check network connection
+                    // Check network connection
                 ConnectivityManager cm = (ConnectivityManager) ContextCompat.getSystemService(RegisterActivity.this, ConnectivityManager.class);
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+                assert cm != null;
+                Network activeNetwork = cm.getActiveNetwork();
+                NetworkCapabilities networkCapabilities = cm.getNetworkCapabilities(activeNetwork);
+                boolean isConnected = activeNetwork != null && networkCapabilities != null && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
                 if (!isConnected) {
                     Toast.makeText(RegisterActivity.this, "No internet connection. Please try again.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+
 
                 if (studentIdEditText.getText().toString().isEmpty() ||
                         studentNameEditText.getText().toString().isEmpty() ||
@@ -162,7 +169,7 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
 
                 call.enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         if (response.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                         } else {
@@ -171,7 +178,8 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        Log.e("RegisterActivity", "Network error", t);
                         if (t instanceof SocketTimeoutException) {
                             Toast.makeText(RegisterActivity.this, "Request timed out. Please check your network connection and try again.", Toast.LENGTH_SHORT).show();
                         } else if (t instanceof HttpException) {

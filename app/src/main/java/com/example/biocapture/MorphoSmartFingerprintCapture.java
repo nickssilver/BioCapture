@@ -88,19 +88,19 @@ public class MorphoSmartFingerprintCapture {
      * @return True if the capture process is done, false otherwise.
      */
     private boolean isCaptureDone() {
-        // Implement this method to check if the capture process is done
-        return true; // Replace this with the actual implementation
+        if (morphoLiveScan.isCaptureCompleted(0) && morphoLiveScan.isCaptureCompleted(1)) {
+            return true;
+        }
+        return false;
     }
 
-    /**
-     * Retrieves the captured fingerprint image at the specified index.
-     * @param index The index of the fingerprint image to retrieve.
-     * @return The captured fingerprint image.
-     */
     private MorphoImage getFingerprintImage(int index) {
-        // Implement this method to retrieve the captured fingerprint image
-        return null; // Replace this with the actual implementation
+        if (index < 0 || index > 1) {
+            throw new IllegalArgumentException("Invalid index for fingerprint image: " + index);
+        }
+        return morphoLiveScan.getFingerprintImage(index);
     }
+
 
     /**
      * Interface for observing capture events.

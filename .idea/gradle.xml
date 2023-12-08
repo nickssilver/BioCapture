@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/MorphoLiveScan" />
             <option value="$PROJECT_DIR$/MorphoSmart_SDK_6.42.0.0" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/morpho" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
