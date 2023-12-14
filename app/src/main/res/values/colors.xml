@@ -3,4 +3,19 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#000075</color>
+    <color name="colorPrimary">#535F5D</color>
+    <color name="colorPrimaryDark">#2C302F</color>
+    <color name="colorAccent">#535F5D</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGreen">#43AD47</color>
+    <color name="colorPurple">#5e20aa</color>
+    <color name="colorGrey">#B0B3B3</color>
+    <color name="colorRed">#DB1212</color>
+    <color name="textColor">#000000</color>
+    <color name="screenTextColor">#000000</color>
+    <color name="footerColor">#431C88</color>
+    <color name="colorFpHeader">#787878</color>
+    <color name="colorFpFooter">#430099</color>
+    <color name="colorBlack">#000000</color>
+    <color name="idemia_purple">#784AB2</color>
 </resources>
