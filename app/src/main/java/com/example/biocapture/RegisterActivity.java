@@ -13,12 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.biocapture.CbmProcessObserver;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-
-import com.example.morpholivescan.MorphoLiveScan;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -32,33 +28,48 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RegisterActivity extends BaseActivity implements MorphoSmartFingerprintCapture.CbmProcessObserver {
-
-    EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText;
+public class RegisterActivity extends BaseActivity {
+    EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, fingerprintEditText1, fingerprintEditText2;
     Button captureButton, submitButton;
     ApiService apiService;
-    MorphoLiveScan morphoLiveScan;
-    MorphoSmartFingerprintCapture morphoSmartFingerprintCapture;
-    int fingerCounter = 0;
+    FingerprintSensor fingerprintSensor;
+    byte[][] fingerprints;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Initialize the MorphoLiveScan and MorphoSmartFingerprintCapture objects
-        morphoLiveScan = new MorphoLiveScan(this);
-        morphoSmartFingerprintCapture = new MorphoSmartFingerprintCapture(morphoLiveScan);
-        morphoSmartFingerprintCapture.registerObserver(this);
-
+        // Initialize the EditText fields
         studentIdEditText = findViewById(R.id.editTextStudentId);
         studentNameEditText = findViewById(R.id.editTextStudentName);
         classIdEditText = findViewById(R.id.editTextClassId);
         statusEditText = findViewById(R.id.editTextStatus);
         arrearsEditText = findViewById(R.id.editTextArrears);
+        fingerprintEditText1 = findViewById(R.id.fingerPrint1);
+        fingerprintEditText2 = findViewById(R.id.fingerPrint2);
+
         captureButton = findViewById(R.id.captureButton);
         submitButton = findViewById(R.id.buttonSubmitReg);
 
+        // Initialize the fingerprint sensor
+        fingerprintSensor = new FingerprintSensor(this);
+
+        // Set up the capture button
+        captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Capture the fingerprints
+                String[] fileNames = fingerprintSensor.captureFingerprints();
+                if (fileNames != null) {
+                    fingerprintEditText1.setText(fileNames[0]);
+                    fingerprintEditText2.setText(fileNames[1]);
+                }
+            }
+        });
+
+        // Set up the Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://192.168.16.64:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -111,15 +122,9 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
             }
         });
 
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                morphoSmartFingerprintCapture.captureTwoFingerprints();
-            }
-        });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 // Check network connection
                 ConnectivityManager cm = (ConnectivityManager) ContextCompat.getSystemService(RegisterActivity.this, ConnectivityManager.class);
@@ -144,7 +149,7 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
                 double arrears = Double.parseDouble(arrearsEditText.getText().toString());
 
                 // Use the captured fingerprint data directly
-                byte[][] fingerprints = morphoSmartFingerprintCapture.getCapturedFingerprints();
+
                 String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
                 String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
 
@@ -188,35 +193,6 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
                 arrearsEditText.getText().toString().isEmpty();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (morphoLiveScan != null) {
-            morphoLiveScan.destroy();
-        }
-    }
-
-    @Override
-    public void onCaptureStart() {
-        fingerCounter++;
-        if (fingerCounter == 1) {
-            Toast.makeText(this, "Capturing first fingerprint...", Toast.LENGTH_SHORT).show();
-        } else if (fingerCounter == 2) {
-            Toast.makeText(this, "Capturing second fingerprint...", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onCaptureComplete(byte[][] fingerprints) {
-        // No need to update the EditText fields here
-    }
-
-    @Override
-    public void onCaptureFailure(Throwable e) {
-        fingerCounter = 0;
-        Log.e("RegisterActivity", "Fingerprint capture failed", e);
-        Toast.makeText(this, "Fingerprint capture failed. Please try again.", Toast.LENGTH_SHORT).show();
-    }
 
     // Extracted method to handle different registration failure scenarios
     private void handleRegistrationFailure(Throwable t) {
@@ -247,3 +223,5 @@ public class RegisterActivity extends BaseActivity implements MorphoSmartFingerp
         }
     }
 }
+
+
