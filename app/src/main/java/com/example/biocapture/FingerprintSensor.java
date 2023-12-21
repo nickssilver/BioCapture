@@ -23,15 +23,18 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
+
 public class FingerprintSensor {
     private static final String TAG = "FingerprintSensor";
     private Activity activity;
-
-    public FingerprintSensor(Activity activity) {
+    private CbmProcessObserver cbmProcessObserver;
+    public FingerprintSensor(Activity activity, CbmProcessObserver cbmProcessObserver) {
         this.activity = activity;
+        this.cbmProcessObserver = cbmProcessObserver;
     }
 
-    public String[] captureFingerprints() {
+    public byte[][] captureFingerprints() {
         // Initialize the fingerprint sensor
         MorphoDevice morphoDevice = initMorphoDevice();
 
@@ -48,7 +51,7 @@ public class FingerprintSensor {
         int nbTemplate = templateList.getNbTemplate();
         if (nbTemplate == 2) {
             // Save the templates to files
-            return saveTemplatesToFile(templateList);
+            return new byte[][]{templateList.getTemplate(0).getData(), templateList.getTemplate(1).getData()};
         }
 
         return null;
@@ -72,12 +75,12 @@ public class FingerprintSensor {
                 | CallbackMask.MORPHO_CALLBACK_IMAGE_CMD.getValue()
                 | CallbackMask.MORPHO_CALLBACK_CODEQUALITY.getValue()
                 | CallbackMask.MORPHO_CALLBACK_DETECTQUALITY.getValue();
-
         // Capture fingerprint
         return morphoDevice.capture(timeout, acquisitionThreshold, advancedSecurityLevelsRequired, fingerNumber,
                 templateType, templateFVPType, maxSizeTemplate, enrollType, latentDetection, coderChoice,
                 detectModeChoice, CompressionAlgorithm.MORPHO_NO_COMPRESS, 0, templateList, callbackCmd, null);
     }
+
 
     private String[] saveTemplatesToFile(TemplateList templateList) {
         // Save the templates to files
@@ -137,5 +140,7 @@ public class FingerprintSensor {
         return md;
     }
 
-    // Other methods...
+    public void setCbmProcessObserver(CbmProcessObserver cbmProcessObserver) {
+        this.cbmProcessObserver = cbmProcessObserver;
+    }
 }

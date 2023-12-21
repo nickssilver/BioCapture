@@ -1,5 +1,6 @@
 package com.example.biocapture;
 
+import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,11 +31,15 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegisterActivity extends BaseActivity {
-    EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, fingerprintEditText1, fingerprintEditText2;
+    EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText;
+    ImageView fingerprintEditText1, fingerprintEditText2;
     Button captureButton, submitButton;
     ApiService apiService;
     FingerprintSensor fingerprintSensor;
     byte[][] fingerprints;
+    int[] captureBitmapIds = {R.id.fingerPrint1, R.id.fingerPrint2};
+    private CbmProcessObserver cbmProcessObserver;
+
 
 
     @Override
@@ -53,18 +59,24 @@ public class RegisterActivity extends BaseActivity {
         captureButton = findViewById(R.id.captureButton);
         submitButton = findViewById(R.id.buttonSubmitReg);
 
+        cbmProcessObserver = new CbmProcessObserver(captureBitmapIds);
         // Initialize the fingerprint sensor
-        fingerprintSensor = new FingerprintSensor(this);
+        fingerprintSensor = new FingerprintSensor((Activity) this, cbmProcessObserver);
+
+        // After initializing the FingerprintSensor
+        fingerprintSensor.setCbmProcessObserver(cbmProcessObserver);
 
         // Set up the capture button
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Capture the fingerprints
-                String[] fileNames = fingerprintSensor.captureFingerprints();
-                if (fileNames != null) {
-                    fingerprintEditText1.setText(fileNames[0]);
-                    fingerprintEditText2.setText(fileNames[1]);
+                byte[][] fingerprintData = fingerprintSensor.captureFingerprints();
+
+                // Check if fingerprints were captured successfully
+                if (fingerprintData != null) {
+                    // Now you have the fingerprint data (byte arrays) ready for posting to the database
+                    // Implement your database posting logic here
                 }
             }
         });

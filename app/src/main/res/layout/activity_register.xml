@@ -261,22 +261,38 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical">
 
-                <EditText
+                <ImageView
                     android:id="@+id/fingerPrint1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/input_bg"
-                    android:drawableTop="@drawable/ic_fingerprint"
-                    android:ems="10"
-                    android:hint="First Finger"
-                    android:inputType="none"
-                    android:padding="10dp"
+                    android:layout_width="120dp"
+                    android:layout_height="187dp"
+                    android:background="@drawable/rectangle"
                     android:textAlignment="center"
                     android:layout_gravity="center"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"/>
+                    android:scaleType="fitXY"
+                    android:contentDescription="@string/todo" />
+                <ProgressBar
+                    android:id="@+id/progressbar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:max="100" />
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:gravity="bottom"
+                    android:textSize="25sp" />
 
 
             </LinearLayout>
@@ -289,22 +305,38 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical">
 
-                <EditText
+                <ImageView
                     android:id="@+id/fingerPrint2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/input_bg"
-                    android:drawableTop="@drawable/ic_fingerprint"
-                    android:ems="10"
-                    android:hint="Second Finger"
-                    android:inputType="text"
-                    android:padding="10dp"
+                    android:layout_width="120dp"
+                    android:layout_height="187dp"
+                    android:background="@drawable/rectangle"
                     android:textAlignment="center"
                     android:layout_gravity="center"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"/>
+                    android:scaleType="fitXY"
+                    android:contentDescription="@string/todo" />
+                <ProgressBar
+                    android:id="@+id/progressbar2"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:max="100" />
+                <TextView
+                    android:id="@+id/tv_status2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_result2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:gravity="bottom"
+                    android:textSize="25sp" />
 
 
             </LinearLayout>
