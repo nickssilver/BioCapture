@@ -71,7 +71,8 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // Capture the fingerprints
-                byte[][] fingerprintData = fingerprintSensor.captureFingerprints();
+                byte[][] fingerprintData;
+                fingerprintData = fingerprintSensor.captureFingerprints();
 
                 // Check if fingerprints were captured successfully
                 if (fingerprintData != null) {
