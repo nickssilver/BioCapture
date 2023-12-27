@@ -7,8 +7,6 @@ android {
     defaultConfig {
         minSdkVersion 29
         targetSdkVersion 33
-        versionCode 1
-        versionName "4.2.0"
 
         ndkVersion "21.1.6352462"
         ndk {
@@ -44,5 +42,5 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 }

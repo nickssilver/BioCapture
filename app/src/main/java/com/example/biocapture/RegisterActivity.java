@@ -77,7 +77,7 @@ public class RegisterActivity extends BaseActivity {
                 // Check if fingerprints were captured successfully
                 if (fingerprintData != null) {
                     // Now you have the fingerprint data (byte arrays) ready for posting to the database
-                    // Implement your database posting logic here
+
                 }
             }
         });
