@@ -1,4 +1,4 @@
-package com.idemia.ledservice;
+package com.example.ledservice;
 
 interface PortInterface {
 	void setTorchLed(int upLedValue, int downLedValue) = 0;

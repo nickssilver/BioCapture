@@ -1,8 +1,15 @@
 package com.example.biocapture;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.BatteryManager;
+import android.os.IBinder;
 import android.util.Log;
 
+import com.example.
 import com.morpho.android.usb.USBManager;
 import com.morpho.morphosmart.sdk.CallbackMask;
 import com.morpho.morphosmart.sdk.Coder;
@@ -22,17 +29,34 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-
 public class FingerprintSensor {
     private static final String TAG = "FingerprintSensor";
     private Activity activity;
     private CbmProcessObserver cbmProcessObserver;
+    private PeripheralsPowerInterface mPeripheralsInterface;
+    private ServiceConnection serviceConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mPeripheralsInterface = PeripheralsPowerInterface.Stub.asInterface(service);
+            Log.d(TAG,"aidl connect success");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mPeripheralsInterface = null;
+            Log.d(TAG,"aidl disconnected");
+        }
+    };
+
     public FingerprintSensor(Activity activity, CbmProcessObserver cbmProcessObserver) {
         this.activity = activity;
         this.cbmProcessObserver = cbmProcessObserver;
-    }
 
+        if(!bindService(getAidlIntent(), serviceConn, Context.BIND_AUTO_CREATE)) {
+            Log.e(TAG, "System couldn't find the service");
+            Toast.makeText(getApplicationContext(), "System couldn't find peripherals service", Toast.LENGTH_SHORT).show();
+        }
+    }
     public byte[][] captureFingerprints() {
         // Initialize the fingerprint sensor
         MorphoDevice morphoDevice = initMorphoDevice();
@@ -142,4 +166,74 @@ public class FingerprintSensor {
     public void setCbmProcessObserver(CbmProcessObserver cbmProcessObserver) {
         this.cbmProcessObserver = cbmProcessObserver;
     }
+
+    private Intent getAidlIntent() {
+        Intent aidlIntent = new Intent();
+        aidlIntent.setAction("idemia.intent.action.CONN_PERIPHERALS_SERVICE_AIDL");
+        aidlIntent.setPackage("com.android.settings");
+        return aidlIntent;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindService(serviceConn);
+    }
+
+    // Additional methods for checking USB device state...
+
+    public boolean getFingerprintSensorState(){
+        boolean ret = false;
+        int usbRole = -1;
+
+        try {
+            if (mPeripheralsInterface != null) {
+                ret = mPeripheralsInterface.getFingerPrintSwitch();
+                if (!ret){
+                    return false;
+                }
+
+                usbRole = mPeripheralsInterface.getUSBRole();
+                if (usbRole == 2){ // DEVICE mode: PC connection only
+                    return false;
+                }else if (usbRole == 1){ // HOST mode: Peripherals only
+                    return true;
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        // Here, fingerprint sensor should be powered on, and USB role set to AUTO
+        // Check if tablet is plugged to the computer
+        if (!isDevicePluggedToPc()){
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isDevicePluggedToPc(){
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getApplicationContext().registerReceiver(null, ifilter);
+
+        // Are we charging / charged?
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+
+        if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL) {
+            // How are we charging?
+            int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+            if (chargePlug == BatteryManager.BATTERY_PLUGGED_USB) {
+                Log.d(TAG, "USB plugged");
+                return true;
+            }
+            if (chargePlug == BatteryManager.BATTERY_PLUGGED_AC) {
+                Log.d(TAG, "Powered by 3.5mm connector");
+                return false;
+            }
+        }
+
+        return false;
+    }
 }
+
