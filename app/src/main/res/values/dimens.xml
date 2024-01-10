@@ -1,0 +1,14 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="footer_height">7dp</dimen>
+
+    <dimen name="fp_header_size">30sp</dimen>
+    <dimen name="fp_label_size">20sp</dimen>
+    <dimen name="fp_label_response_size">18sp</dimen>
+
+    <!--<dimen name="fp_header_size">30pt</dimen>
+    <dimen name="fp_label_size">20pt</dimen>
+    <dimen name="fp_label_response_size">18pt</dimen>-->
+
+
+</resources>

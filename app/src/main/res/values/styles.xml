@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="colorSwitchThumbNormal">@color/colorFpFooter</item>
+        <item name="android:colorForeground">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="FpLabel">
+    </style>
+
+    <style name="FpLabelResponse">
+    </style>
+
+    <style name="idscreenButton">
+    </style>
+
+    <style name="seekBarStyle" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint">@color/colorGrey</item>
+        <item name="android:progressTint">@color/idemia_purple</item>
+        <item name="android:thumbTint">@color/colorFpFooter</item>
+    </style>
+
+    <style name="checkBoxTheme" parent="Theme.AppCompat.Light">
+        <item name="buttonTint">@color/idemia_purple</item>
+    </style>
+
+    <style name="EditTextTheme">
+        <item name="colorAccent">@color/idemia_purple</item>
+    </style>
+
+</resources>

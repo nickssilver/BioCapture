@@ -1,6 +1,7 @@
 package com.example.biocapture;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
@@ -30,18 +32,21 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
+
 public class RegisterActivity extends BaseActivity {
-    EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText;
+    EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, editTextFingerprint1;
     ImageView fingerprintEditText1, fingerprintEditText2;
     Button captureButton, submitButton;
     ApiService apiService;
-    FingerprintSensor fingerprintSensor;
+
     byte[][] fingerprints;
     int[] captureBitmapIds = {R.id.fingerPrint1, R.id.fingerPrint2};
-    private CbmProcessObserver cbmProcessObserver;
 
 
 
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,32 +58,21 @@ public class RegisterActivity extends BaseActivity {
         classIdEditText = findViewById(R.id.editTextClassId);
         statusEditText = findViewById(R.id.editTextStatus);
         arrearsEditText = findViewById(R.id.editTextArrears);
-        fingerprintEditText1 = findViewById(R.id.fingerPrint1);
+        editTextFingerprint1 = findViewById(R.id.fingerPrint1);
         fingerprintEditText2 = findViewById(R.id.fingerPrint2);
 
         captureButton = findViewById(R.id.captureButton);
         submitButton = findViewById(R.id.buttonSubmitReg);
 
-        cbmProcessObserver = new CbmProcessObserver(captureBitmapIds);
-        // Initialize the fingerprint sensor
-        fingerprintSensor = new FingerprintSensor((Activity) this, cbmProcessObserver);
 
-        // After initializing the FingerprintSensor
-        fingerprintSensor.setCbmProcessObserver(cbmProcessObserver);
 
         // Set up the capture button
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Capture the fingerprints
-                byte[][] fingerprintData;
-                fingerprintData = fingerprintSensor.captureFingerprints();
-
-                // Check if fingerprints were captured successfully
-                if (fingerprintData != null) {
-                    // Now you have the fingerprint data (byte arrays) ready for posting to the database
-
-                }
+                // Start FpSensorActivity to capture fingerprints
+                Intent intent = new Intent(RegisterActivity.this, FpSensorActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_CAPTURE_FINGERPRINTS);
             }
         });
 
@@ -162,6 +156,9 @@ public class RegisterActivity extends BaseActivity {
                 double arrears = Double.parseDouble(arrearsEditText.getText().toString());
 
                 // Use the captured fingerprint data directly
+                // 3. Retrieve fingerprint data from FpSensorActivity
+
+                byte[][] fingerprints = FpSensorActivity.getFingerprints();
 
                 String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
                 String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
@@ -195,6 +192,18 @@ public class RegisterActivity extends BaseActivity {
                 });
             }
         });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_CAPTURE_FINGERPRINTS && resultCode == RESULT_OK) {
+            // Fingerprint data is captured successfully
+            // Retrieve fingerprint data from the intent extras if needed
+            byte[][] fingerprints = (byte[][]) data.getSerializableExtra(FpSensorActivity.EXTRA_FINGERPRINTS);
+
+            // Now you can use the captured fingerprint data as needed
+        }
     }
 
     // Extracted method to check if any required fields are empty
@@ -235,6 +244,8 @@ public class RegisterActivity extends BaseActivity {
             Toast.makeText(RegisterActivity.this, "An unexpected error occurred. Please try again later.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private static final int REQUEST_CODE_CAPTURE_FINGERPRINTS = 123;
 }
 
 

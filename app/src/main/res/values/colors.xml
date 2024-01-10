@@ -17,5 +17,6 @@
     <color name="colorFpHeader">#787878</color>
     <color name="colorFpFooter">#430099</color>
     <color name="colorBlack">#000000</color>
+    <color name="example_purple">#784AB2</color>
     <color name="idemia_purple">#784AB2</color>
 </resources>

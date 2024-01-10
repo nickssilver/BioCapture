@@ -5,17 +5,17 @@ package com.example.biocapture;
 
 interface PeripheralsPowerInterface {
      boolean setFingerPrintSwitch(boolean flag);
-       boolean getFingerPrintSwitch();
+     boolean getFingerPrintSwitch();
 
-       boolean setHostUsbPortSwitch(boolean flag);
-       boolean getHostUsbPortSwitch();
+     boolean setHostUsbPortSwitch(boolean flag);
+     boolean getHostUsbPortSwitch();
 
-       boolean setDockingStationUsbPortSwitch(boolean flag);
-       boolean getDockingStationUsbPortSwitch();
+     boolean setDockingStationUsbPortSwitch(boolean flag);
+     boolean getDockingStationUsbPortSwitch();
 
-       boolean setNfcSwitch(boolean flag);
-       boolean getNfcSwitch();
+     boolean setNfcSwitch(boolean flag);
+     boolean getNfcSwitch();
 
-       void setUSBRole(int role);
-       int getUSBRole();
-   }
+     void setUSBRole(int role);
+     int getUSBRole();
+}

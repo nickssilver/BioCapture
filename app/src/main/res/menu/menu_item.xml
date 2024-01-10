@@ -16,6 +16,12 @@
                                 android:title="Verify"
                                 app:showAsAction="never"
                                 android:icon="@drawable/baseline_verified_user_24"/>
+                        <item
+                            android:id="@+id/test"
+                            android:title="test"
+                            app:showAsAction="never"
+                            android:icon="@drawable/baseline_verified_user_24"/>
+
 
                 </menu>
         </item>

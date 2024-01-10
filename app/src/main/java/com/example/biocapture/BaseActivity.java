@@ -26,6 +26,10 @@ public class BaseActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.verify) {
             startActivity(new Intent(this, VerifyActivity.class));
             return true;
+        } else if (item.getItemId() == R.id.test) {
+            startActivity(new Intent(this, FpSensorActivity.class));
+            return true;
+
         } else {
             return super.onOptionsItemSelected(item);
         }

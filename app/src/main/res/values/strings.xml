@@ -7,17 +7,24 @@
     <string name="editTextStudentname_contentDescription">Student Name input field</string>
     <string name="title">title</string>
     <string name="todo">TODO</string>
-    <!--     FINGERPRINT SENSOR SAMPLE        -->
+
+    <!--    FINGERPRINT SENSOR SAMPLE       -->
     <string name="capture">Capture</string>
     <string name="choosePic">Choose</string>
     <string name="stop">Stop</string>
     <string name="verify">Verify</string>
-    <string name="textForReference">Reference Fingerprint sensor code with full features and documentation is located in MorphoSmart SDK (in MorphoSample folder), which is included in ID Screen SDK. </string>
-    <string name="textForTooSlimReference">Reference fingerprint sensor code with full features and documentation is located in MorphoLiveScan SDK, which is located in ID Screen SDK archive. </string>
-    <string name="noAccessToDevice">Warning: cannot connect to fingerprint sensor.\n\nPlease open item \"Peripheral Management\" in this application main menu and check following settings :\n\t- Fingerprint sensor should be enabled\n\t- USB mode should be set to "Host". Or it should be set to "Auto" and PC shouldn\'t be connected to tablet.\n\nPlease also check that no other fingerprint sensor is connected to tablet. </string>
+    <string name="textForReference">Reference Fingerprint sensor code with full features  and documentation is located in MorphoSmart SDK (in MorphoSample folder), which is included in ID Screen SDK.
+    </string>
+    <string name="textForTooSlimReference">Reference fingerprint sensor code with full features and documentation is located in MorphoLiveScan SDK, which is located in ID Screen SDK archive.
+    </string>
+    <string name="noAccessToDevice">Warning: cannot connect to fingerprint sensor.\n\nPlease open item \"Peripheral Management\" in this application main menu and check following settings :\n\t- Fingerprint sensor should be enabled\n\t- USB mode should be set to "Host". Or it should be set to "Auto" and PC shouldn\'t be connected to tablet.\n\nPlease also check that no other fingerprint sensor is connected to tablet.
+    </string>
     <string name="cameraPreviewForMore">Preflash and flash brightness can be checked by taking a picture.\nPlease open Camera application below.</string>
     <string name="incompatibleFirmware">Your device is not running example secure firmware (version Sxx-y).\nSome features will not be available or will not work properly.\nPlease update your device to example secure firmware to use all features.</string>
     <string name="incompatibleFirmware60">Your device is not running example secure firmware (version Kxx-y).\nSome features will not be available or will not work properly.\nPlease update your device to example secure firmware to use all features.</string>
     <string name="sensorInitiliazing">Initializing fingerprint sensor, please wait …</string>
     <string name="Verify">verify</string>
+    <string name="usb_mode_0"></string>
+    <string name="usb_mode_1"></string>
+    <string name="usb_mode_2"></string>
 </resources>
