@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,17 +34,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class RegisterActivity extends BaseActivity {
-    EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, editTextFingerprint1;
-    ImageView fingerprintEditText1, fingerprintEditText2;
+    EditText studentIdEditText, studentNameEditText, classIdEditText, statusEditText, arrearsEditText, editTextFingerprint1, editTextFingerprint2;
     Button captureButton, submitButton;
     ApiService apiService;
 
     byte[][] fingerprints;
     int[] captureBitmapIds = {R.id.fingerPrint1, R.id.fingerPrint2};
-
-
-
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +53,7 @@ public class RegisterActivity extends BaseActivity {
         statusEditText = findViewById(R.id.editTextStatus);
         arrearsEditText = findViewById(R.id.editTextArrears);
         editTextFingerprint1 = findViewById(R.id.fingerPrint1);
-        fingerprintEditText2 = findViewById(R.id.fingerPrint2);
+        editTextFingerprint2 = findViewById(R.id.fingerPrint2);
 
         captureButton = findViewById(R.id.captureButton);
         submitButton = findViewById(R.id.buttonSubmitReg);
@@ -154,12 +148,6 @@ public class RegisterActivity extends BaseActivity {
                 String classId = classIdEditText.getText().toString();
                 String status = statusEditText.getText().toString();
                 double arrears = Double.parseDouble(arrearsEditText.getText().toString());
-
-                // Use the captured fingerprint data directly
-                // 3. Retrieve fingerprint data from FpSensorActivity
-
-                byte[][] fingerprints = FpSensorActivity.getFingerprints();
-
                 String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
                 String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
 
@@ -193,18 +181,25 @@ public class RegisterActivity extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE_CAPTURE_FINGERPRINTS && resultCode == RESULT_OK) {
             // Fingerprint data is captured successfully
-            // Retrieve fingerprint data from the intent extras if needed
+            // Retrieve fingerprint data from the intent extras
             byte[][] fingerprints = (byte[][]) data.getSerializableExtra(FpSensorActivity.EXTRA_FINGERPRINTS);
 
-            // Now you can use the captured fingerprint data as needed
+            // Convert the fingerprints to strings and set them as the text of the EditText fields
+            String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
+            String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
+
+            editTextFingerprint1.setText(fingerprint1);
+            editTextFingerprint2.setText(fingerprint2);
         }
     }
+
 
     // Extracted method to check if any required fields are empty
     private boolean areFieldsEmpty() {

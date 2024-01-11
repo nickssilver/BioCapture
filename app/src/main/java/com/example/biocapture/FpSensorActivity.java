@@ -18,6 +18,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -60,15 +61,25 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class FpSensorActivity extends BaseActivity {
     public static final String EXTRA_FINGERPRINTS = "extra_fingerprints";
     private void returnFingerprintData(byte[][] fingerprints) {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra(EXTRA_FINGERPRINTS, fingerprints);
+       Intent resultIntent = new Intent();
+       resultIntent.putExtra(EXTRA_FINGERPRINTS, fingerprints);
         setResult(RESULT_OK, resultIntent);
-        finish();
-    }
+
+
+        // Create a new Intent for the RegisterActivity
+        // Intent registerIntent = new Intent(this, RegisterActivity.class);
+
+        // Put the fingerprint data in the Intent as extras
+        //registerIntent.putExtra(EXTRA_FINGERPRINTS, fingerprints);
+
+        // Start the RegisterActivity with the Intent
+        //startActivity(registerIntent);
+   }
     private String TAG = "FpSensorActivity";
     private String title = "";
     private AppCompatTextView title_tv = null;
@@ -90,10 +101,13 @@ public class FpSensorActivity extends BaseActivity {
 
     private boolean capturing = false;
     private boolean verifying = false;
+    private int captureCount = 0;
 
     private boolean deviceIsSet = false;
     private Intent resultIntent;
-    private static byte[][] capturedFingerprints;
+
+    // Change this to a 2D array to store two fingerprints
+    private static byte[][] capturedFingerprints = new byte[2][];
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -163,9 +177,8 @@ public class FpSensorActivity extends BaseActivity {
         processObserver = new CbmProcessObserver(rootView);
 
     }
-    public static byte[][] getFingerprints() {
-        return capturedFingerprints;
-    }
+    //public static byte[][] getFingerprints() {
+        //return capturedFingerprints;}
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -188,8 +201,21 @@ public class FpSensorActivity extends BaseActivity {
             progressBar.setVisibility(View.VISIBLE);
             result_tv.setText("");
 
+            // Create a CountDownLatch with a count of 1
+            final CountDownLatch latch = new CountDownLatch(1);
+            // Capture the first fingerprint
             morphoDeviceCapture();
 
+            // Schedule the second capture after a delay
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Ensure the first finger is removed before capturing the second one
+                    morphoDeviceCapture();
+                }
+
+            }, 5000); // Delay of 5 seconds
             capture_bt.setText(R.string.stop);
             verify_bt.setVisibility(View.GONE);
         }
@@ -390,6 +416,16 @@ public class FpSensorActivity extends BaseActivity {
                     String msg = "";
 
                     if (nbTemplate == 1) {
+                        Template template1 = templateList.getTemplate(0);
+
+                        // Store the captured fingerprints in the class variable
+                        if (capturedFingerprints[0] == null) {
+                            capturedFingerprints[0] = template1.getData();
+                        } else {
+                            capturedFingerprints[1] = template1.getData();
+                        }
+                        // Increment the capture count
+                        captureCount++;
 
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                         String currentDateandTime = sdf.format(new Date());
@@ -400,15 +436,6 @@ public class FpSensorActivity extends BaseActivity {
 
                         final String alertMessage = msg;
                         final Template t = templateList.getTemplate(0);
-
-                        // ...
-
-                        resultIntent.putExtra("FILENAME", file_name); // Add this line to pass the file name
-                        resultIntent.putExtra(EXTRA_FINGERPRINTS, capturedFingerprints);
-                        setResult(RESULT_OK, resultIntent);
-                        finish();
-                        // Store the captured fingerprints in the class variable
-                        capturedFingerprints = new byte[][]{t.getData(), /* add another fingerprint data if needed */};
 
                         // Dialog window to save the template
                         runOnUiThread(new Runnable() {
@@ -437,10 +464,14 @@ public class FpSensorActivity extends BaseActivity {
                                 builder.show();
                             }
                         });
+                        // If both captures have finished, return the fingerprint data
+                        if (captureCount >= 2) {
+                            returnFingerprintData(capturedFingerprints);
 
+
+                        }
                     }
                 }
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -459,9 +490,11 @@ public class FpSensorActivity extends BaseActivity {
             }
         });
         commandThread.start();
+
     }
 
-    /**************************** VERIFY **********************************/
+
+        /**************************** VERIFY **********************************/
     public void morphoDeviceVerify(){
 
         if (morphoDevice == null){
