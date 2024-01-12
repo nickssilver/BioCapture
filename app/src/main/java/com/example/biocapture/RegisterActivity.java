@@ -38,6 +38,7 @@ public class RegisterActivity extends BaseActivity {
     Button captureButton, submitButton;
     ApiService apiService;
 
+    private int counter = 0;
     byte[][] fingerprints;
     int[] captureBitmapIds = {R.id.fingerPrint1, R.id.fingerPrint2};
     @SuppressLint("MissingInflatedId")
@@ -62,8 +63,13 @@ public class RegisterActivity extends BaseActivity {
 
         // Set up the capture button
         captureButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+                // Increment the counter
+                counter++;
+                // Disable the submit button
+                submitButton.setEnabled(false);
                 // Start FpSensorActivity to capture fingerprints
                 Intent intent = new Intent(RegisterActivity.this, FpSensorActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_CAPTURE_FINGERPRINTS);
@@ -89,6 +95,7 @@ public class RegisterActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // This method is intentionally left blank
             }
+
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -123,6 +130,33 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
+        editTextFingerprint1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Enable the submit button if the EditText fields are not empty
+                submitButton.setEnabled(!areFieldsEmpty());
+            }
+        });
+
+        editTextFingerprint2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Enable the submit button if the EditText fields are not empty
+                submitButton.setEnabled(!areFieldsEmpty());
+            }
+        });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
 
@@ -148,8 +182,12 @@ public class RegisterActivity extends BaseActivity {
                 String classId = classIdEditText.getText().toString();
                 String status = statusEditText.getText().toString();
                 double arrears = Double.parseDouble(arrearsEditText.getText().toString());
-                String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
-                String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
+
+                String fingerprint1 = fingerprints != null && fingerprints.length > 0 ? Base64.encodeToString(fingerprints[0], Base64.DEFAULT) : "";
+                String fingerprint2 = fingerprints != null && fingerprints.length > 1 ? Base64.encodeToString(fingerprints[1], Base64.DEFAULT) : "";
+
+                //String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
+                //String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
 
                 RegisterStudentRequest request = new RegisterStudentRequest(
                         studentId,
@@ -180,6 +218,8 @@ public class RegisterActivity extends BaseActivity {
                 });
             }
         });
+        submitButton.setEnabled(false);
+
     }
 
     @Override
@@ -187,9 +227,19 @@ public class RegisterActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE_CAPTURE_FINGERPRINTS && resultCode == RESULT_OK) {
+            // Decrement the counter
+            counter--;
+            // Check if all operations are complete
+            if (counter == 0) {
+                // All operations are complete
+                // Enable the submit button
+                submitButton.setEnabled(true);
+            }
             // Fingerprint data is captured successfully
             // Retrieve fingerprint data from the intent extras
+
             byte[][] fingerprints = (byte[][]) data.getSerializableExtra(FpSensorActivity.EXTRA_FINGERPRINTS);
+
 
             // Convert the fingerprints to strings and set them as the text of the EditText fields
             String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
@@ -197,6 +247,8 @@ public class RegisterActivity extends BaseActivity {
 
             editTextFingerprint1.setText(fingerprint1);
             editTextFingerprint2.setText(fingerprint2);
+
+
         }
     }
 
@@ -207,7 +259,9 @@ public class RegisterActivity extends BaseActivity {
                 studentNameEditText.getText().toString().isEmpty() ||
                 classIdEditText.getText().toString().isEmpty() ||
                 statusEditText.getText().toString().isEmpty() ||
-                arrearsEditText.getText().toString().isEmpty();
+                arrearsEditText.getText().toString().isEmpty() ||
+                editTextFingerprint1.getText().toString().isEmpty() ||
+                editTextFingerprint2.getText().toString().isEmpty();
     }
 
 
