@@ -54,12 +54,7 @@ import com.morpho.morphosmart.sdk.TemplateType;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -345,7 +340,6 @@ public class FpSensorActivity extends BaseActivity {
 
     /**************************** CAPTURE *********************************/
     public void morphoDeviceCapture() {
-
         if (morphoDevice == null){
             morphoDevice = initMorphoDevice(this);
             deviceIsSet = true;
@@ -427,17 +421,11 @@ public class FpSensorActivity extends BaseActivity {
                         // Increment the capture count
                         captureCount++;
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                        String currentDateandTime = sdf.format(new Date());
-                        String file_name = "TemplateFP_" + currentDateandTime + "_" + System.currentTimeMillis() + templateType.getExtension();
-                        File file = new File(getExternalFilesDir(null), file_name);
-
-                        msg += "Template successfully captured!\n\nThis template is saved as:\n\n" + file;
+                        msg += "Template successfully captured!";
 
                         final String alertMessage = msg;
-                        final Template t = templateList.getTemplate(0);
 
-                        // Dialog window to save the template
+                        // Dialog window to inform the user
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -448,17 +436,7 @@ public class FpSensorActivity extends BaseActivity {
                                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        try {
-
-                                            FileOutputStream fos = new FileOutputStream(file);
-                                            fos.write(t.getData());
-                                            fos.close();
-
-                                        } catch (FileNotFoundException e) {
-                                            Log.e(TAG, "Cannot write in " + file + " " + e.getMessage());
-                                        } catch (IOException e) {
-                                            Log.e(TAG, "FileOutputStream : " + e.getMessage());
-                                        }
+                                        // Do nothing here since we are not saving the template
                                     }
                                 });
                                 builder.show();
@@ -467,8 +445,6 @@ public class FpSensorActivity extends BaseActivity {
                         // If both captures have finished, return the fingerprint data
                         if (captureCount >= 2) {
                             returnFingerprintData(capturedFingerprints);
-
-
                         }
                     }
                 }
@@ -490,11 +466,10 @@ public class FpSensorActivity extends BaseActivity {
             }
         });
         commandThread.start();
-
     }
 
 
-        /**************************** VERIFY **********************************/
+    /**************************** VERIFY **********************************/
     public void morphoDeviceVerify(){
 
         if (morphoDevice == null){

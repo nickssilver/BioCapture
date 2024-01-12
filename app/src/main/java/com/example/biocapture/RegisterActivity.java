@@ -206,6 +206,19 @@ public class RegisterActivity extends BaseActivity {
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         if (response.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                            // Reset the EditText fields
+                            studentIdEditText.setText("");
+                            studentNameEditText.setText("");
+                            classIdEditText.setText("");
+                            statusEditText.setText("");
+                            arrearsEditText.setText("");
+                            editTextFingerprint1.setText("");
+                            editTextFingerprint2.setText("");
+
+                            // Reset the counter
+                            counter = 0;
+
+
                         } else {
                             Toast.makeText(RegisterActivity.this, "Registration failed: " + response.message(), Toast.LENGTH_SHORT).show();
                         }
