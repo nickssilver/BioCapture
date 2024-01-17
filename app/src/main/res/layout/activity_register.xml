@@ -270,7 +270,7 @@
                         android:layout_marginEnd="60dp"
                         android:drawableTop="@drawable/ic_fingerprint"
                         android:ems="10"
-                        android:focusable="false"
+
                         android:hint="Finger1"
                         android:inputType="text"
                         android:background="@null"
@@ -302,7 +302,7 @@
                         android:layout_marginEnd="70dp"
                         android:drawableTop="@drawable/ic_fingerprint"
                         android:ems="10"
-                        android:focusable="false"
+
                         android:hint="Finger2"
                         android:inputType="text"
                         android:background="@null"

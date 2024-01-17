@@ -78,7 +78,7 @@ public class RegisterActivity extends BaseActivity {
 
         // Set up the Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http:192.168.16.100:5223/")
+                .baseUrl("http:192.168.16.91:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -118,6 +118,25 @@ public class RegisterActivity extends BaseActivity {
                                 classIdEditText.setText(studentData.getTheClass());
                                 statusEditText.setText(studentData.getStudStatus());
                                 arrearsEditText.setText(String.valueOf(studentData.getArrears()));
+
+                            } else {
+                                // Parse error message from response body
+                                String errorMessage = "";
+                                try {
+                                    errorMessage = response.errorBody().string();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                int statusCode = response.code();
+                                if (statusCode == 404) {
+                                    Toast.makeText(RegisterActivity.this, "Student ID not found", Toast.LENGTH_SHORT).show();
+                                } else if (statusCode == 409) {
+                                    Toast.makeText(RegisterActivity.this, "Student is already registered", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, "An error occurred: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         }
 
@@ -186,8 +205,7 @@ public class RegisterActivity extends BaseActivity {
                 String fingerprint1 = fingerprints != null && fingerprints.length > 0 ? Base64.encodeToString(fingerprints[0], Base64.DEFAULT) : "";
                 String fingerprint2 = fingerprints != null && fingerprints.length > 1 ? Base64.encodeToString(fingerprints[1], Base64.DEFAULT) : "";
 
-                //String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
-                //String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
+
 
                 RegisterStudentRequest request = new RegisterStudentRequest(
                         studentId,
@@ -255,12 +273,15 @@ public class RegisterActivity extends BaseActivity {
 
 
             // Convert the fingerprints to strings and set them as the text of the EditText fields
-            String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
+           /*String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
             String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
 
             editTextFingerprint1.setText(fingerprint1);
-            editTextFingerprint2.setText(fingerprint2);
+            editTextFingerprint2.setText(fingerprint2);*/
 
+            // Set the raw fingerprint data as the text of the EditText fields
+            editTextFingerprint1.setText(new String(fingerprints[0]));
+            editTextFingerprint2.setText(new String(fingerprints[1]));
 
         }
     }
