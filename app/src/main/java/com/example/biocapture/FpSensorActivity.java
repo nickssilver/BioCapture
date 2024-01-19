@@ -1,5 +1,7 @@
 package com.example.biocapture;
 
+
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
@@ -55,19 +57,38 @@ import java.util.concurrent.CountDownLatch;
 
 public class FpSensorActivity extends BaseActivity {
     public static final String EXTRA_FINGERPRINTS = "extra_fingerprints";
+    private static final int REQUEST_CODE_VERIFY_FINGERPRINT = 456;
     private void returnFingerprintData(byte[][] fingerprints) {
        Intent resultIntent = new Intent();
        resultIntent.putExtra(EXTRA_FINGERPRINTS, fingerprints);
         setResult(RESULT_OK, resultIntent);
    }
+    public static final String VERIFYFINGER = "verifyfinger";
+    private void returnFinger(byte[] fingerprints) {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(VERIFYFINGER, fingerprints);
+        setResult(RESULT_OK, resultIntent);
+        startVerifyActivityAfterCapture();
+        Log.d(TAG, "Returned fingerprints: " + fingerprints.length); // Add this line
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                finish(); // Stop the current activity
+            }
+        });
+    }
+
+
     private void startVerifyActivityAfterCapture() {
         // Create a new intent for VerifyActivity
         Intent intent = new Intent(this, VerifyActivity.class);
         // Add the captured fingerprints to the intent
-        intent.putExtra(EXTRA_FINGERPRINTS, capturedFingerprints);
-        // Start VerifyActivity
-        startActivity(intent);
+        intent.putExtra(VERIFYFINGER, capturedFinger);
+        // Start VerifyActivity for result
+        startActivityForResult(intent, REQUEST_CODE_VERIFY_FINGERPRINT);
     }
+
+
 
 
 
@@ -99,6 +120,8 @@ public class FpSensorActivity extends BaseActivity {
 
     // Change this to a 2D array to store two fingerprints
     private static byte[][] capturedFingerprints = new byte[2][];
+
+    private static byte[] capturedFinger = new byte[1];
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -233,7 +256,7 @@ public class FpSensorActivity extends BaseActivity {
 
             rootView.setKeepScreenOn(true);
 
-            morphoDeviceCapture();
+            performTask();
 
             verify_bt.setText(R.string.stop);
             capture_bt.setVisibility(View.GONE);
@@ -247,6 +270,7 @@ public class FpSensorActivity extends BaseActivity {
             deviceIsSet = false;
         }
     }
+
 
 
 
@@ -453,6 +477,132 @@ public class FpSensorActivity extends BaseActivity {
         });
         commandThread.start();
     }
+
+    private void performTask() {
+        captureOneFinger();
+    }
+    public void captureOneFinger() {
+        if (morphoDevice == null){
+            morphoDevice = initMorphoDevice(this);
+            deviceIsSet = true;
+        }
+
+        /********* CAPTURE THREAD *************/
+        Thread commandThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                int ret = 0;
+                int timeout = 30;
+                final int acquisitionThreshold = 0;
+                int advancedSecurityLevelsRequired = 0;
+                int fingerNumber = 1;
+                TemplateType templateType = TemplateType.MORPHO_PK_ISO_FMR;
+                TemplateFVPType templateFVPType = TemplateFVPType.MORPHO_NO_PK_FVP;
+                int maxSizeTemplate = 512;
+                EnrollmentType enrollType = EnrollmentType.ONE_ACQUISITIONS;
+                LatentDetection latentDetection = LatentDetection.LATENT_DETECT_ENABLE;
+                Coder coderChoice = Coder.MORPHO_DEFAULT_CODER;
+                int detectModeChoice = DetectionMode.MORPHO_ENROLL_DETECT_MODE.getValue()
+                        | DetectionMode.MORPHO_FORCE_FINGER_ON_TOP_DETECT_MODE.getValue();//18;
+                TemplateList templateList = new TemplateList();
+
+                // Define the messages sent through the callback
+                int callbackCmd = CallbackMask.MORPHO_CALLBACK_COMMAND_CMD.getValue()
+                        | CallbackMask.MORPHO_CALLBACK_IMAGE_CMD.getValue()
+                        | CallbackMask.MORPHO_CALLBACK_CODEQUALITY.getValue()
+                        | CallbackMask.MORPHO_CALLBACK_DETECTQUALITY.getValue();
+
+                /********* CAPTURE *************/
+                ret = morphoDevice.capture(timeout, acquisitionThreshold, advancedSecurityLevelsRequired,
+                        fingerNumber, templateType, templateFVPType, maxSizeTemplate, enrollType,
+                        latentDetection, coderChoice, detectModeChoice,
+                        CompressionAlgorithm.MORPHO_NO_COMPRESS, 0, templateList,
+                        callbackCmd, processObserver);
+
+                Log.d(TAG, "morphoDeviceCapture ret = " + ret);
+                if(ret != ErrorCodes.MORPHO_OK) {
+                    String err = "";
+                    if ( ret == ErrorCodes.MORPHOERR_TIMEOUT ){
+                        err = "Capture failed : timeout";
+                    }
+                    else if (ret == ErrorCodes.MORPHOERR_CMDE_ABORTED ){
+                        err = "Capture aborted";
+                    }
+                    else if (ret == ErrorCodes.MORPHOERR_UNAVAILABLE) {
+                        err = "Device is not available";
+                    }
+                    else{
+                        err = "Error code is " + ret;
+                    }
+
+                    final String finalErr = err;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showToastMessage(finalErr, Toast.LENGTH_SHORT);
+                        }
+                    });
+                }
+                else {
+                    // Here fingerNumber = 1, so we will get only one template
+                    int nbTemplate = templateList.getNbTemplate();
+                    Log.d(TAG, "morphoDeviceCapture nbTemplate = " + nbTemplate);
+
+                    String msg = "";
+
+                    if (nbTemplate == 1) {
+                        Template template1 = templateList.getTemplate(0);
+
+                        // Store the captured fingerprints in the class variable
+                        capturedFinger = template1.getData();
+
+                        msg += "Template successfully captured!";
+
+                        final String alertMessage = msg;
+
+                        // Dialog window to inform the user
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(rootView.getContext());
+                                builder.setTitle(R.string.app_name);
+                                builder.setCancelable(false);
+                                builder.setMessage(alertMessage);
+                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Call the returnFinger() method when the OK button is clicked
+                                        returnFinger(capturedFinger);
+                                        startVerifyActivityAfterCapture(); // add this line
+                                    }
+                                });
+                                builder.show();
+                            }
+                        });
+
+                    }
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        progressBar.setProgress(0);
+
+                        status_tv.setText("");
+
+                        capturing = false;
+                        rootView.setKeepScreenOn(false);
+
+                        capture_bt.setText(R.string.capture);
+                        verify_bt.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+        commandThread.start();
+    }
+
 
 
     /**************************** VERIFY **********************************/

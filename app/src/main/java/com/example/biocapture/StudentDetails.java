@@ -1,10 +1,17 @@
 package com.example.biocapture;
 
+import com.google.gson.annotations.SerializedName;
+
 public class StudentDetails {
+    @SerializedName("studentId")
     private String StudentId;
+    @SerializedName("studentName")
     private String StudentName;
+    @SerializedName("classId")
     private String ClassId;
+    @SerializedName("status")
     private String Status;
+    @SerializedName("arrears")
     private double Arrears;
 
     // Getters

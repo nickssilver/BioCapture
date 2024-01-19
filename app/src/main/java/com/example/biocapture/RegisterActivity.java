@@ -78,7 +78,7 @@ public class RegisterActivity extends BaseActivity {
 
         // Set up the Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http:192.168.16.91:5223/")
+                .baseUrl("http:192.168.16.97:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -275,7 +275,6 @@ public class RegisterActivity extends BaseActivity {
             // Convert the fingerprints to strings and set them as the text of the EditText fields
            /*String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
             String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
-
             editTextFingerprint1.setText(fingerprint1);
             editTextFingerprint2.setText(fingerprint2);*/
 
