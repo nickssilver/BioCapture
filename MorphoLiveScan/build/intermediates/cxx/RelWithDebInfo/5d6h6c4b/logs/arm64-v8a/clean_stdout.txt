@@ -1,3 +1,0 @@
-ninja: Entering directory `C:\Users\Software Engineer\AndroidStudioProjects\BioCapture - Copy\MorphoLiveScan\.cxx\RelWithDebInfo\5d6h6c4b\arm64-v8a'
-[1/1] Cleaning all built files...
-Cleaning... 0 files.

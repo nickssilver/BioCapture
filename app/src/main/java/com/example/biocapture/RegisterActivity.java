@@ -78,7 +78,7 @@ public class RegisterActivity extends BaseActivity {
 
         // Set up the Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http:192.168.16.97:5223/")
+                .baseUrl("http:192.168.137.156:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -268,15 +268,7 @@ public class RegisterActivity extends BaseActivity {
             }
             // Fingerprint data is captured successfully
             // Retrieve fingerprint data from the intent extras
-
             byte[][] fingerprints = (byte[][]) data.getSerializableExtra(FpSensorActivity.EXTRA_FINGERPRINTS);
-
-
-            // Convert the fingerprints to strings and set them as the text of the EditText fields
-           /*String fingerprint1 = Base64.encodeToString(fingerprints[0], Base64.DEFAULT);
-            String fingerprint2 = Base64.encodeToString(fingerprints[1], Base64.DEFAULT);
-            editTextFingerprint1.setText(fingerprint1);
-            editTextFingerprint2.setText(fingerprint2);*/
 
             // Set the raw fingerprint data as the text of the EditText fields
             editTextFingerprint1.setText(new String(fingerprints[0]));

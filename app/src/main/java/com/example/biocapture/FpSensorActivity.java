@@ -1,7 +1,6 @@
 package com.example.biocapture;
 
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
@@ -57,36 +56,30 @@ import java.util.concurrent.CountDownLatch;
 
 public class FpSensorActivity extends BaseActivity {
     public static final String EXTRA_FINGERPRINTS = "extra_fingerprints";
-    private static final int REQUEST_CODE_VERIFY_FINGERPRINT = 456;
     private void returnFingerprintData(byte[][] fingerprints) {
-       Intent resultIntent = new Intent();
-       resultIntent.putExtra(EXTRA_FINGERPRINTS, fingerprints);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(EXTRA_FINGERPRINTS, fingerprints);
         setResult(RESULT_OK, resultIntent);
-   }
+    }
+    private static final int REQUEST_CODE_VERIFY_FINGERPRINT = 456;
     public static final String VERIFYFINGER = "verifyfinger";
     private void returnFinger(byte[] fingerprints) {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(VERIFYFINGER, fingerprints);
         setResult(RESULT_OK, resultIntent);
-        startVerifyActivityAfterCapture();
-        Log.d(TAG, "Returned fingerprints: " + fingerprints.length); // Add this line
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                finish(); // Stop the current activity
-            }
-        });
     }
 
 
-    private void startVerifyActivityAfterCapture() {
-        // Create a new intent for VerifyActivity
-        Intent intent = new Intent(this, VerifyActivity.class);
-        // Add the captured fingerprints to the intent
-        intent.putExtra(VERIFYFINGER, capturedFinger);
-        // Start VerifyActivity for result
-        startActivityForResult(intent, REQUEST_CODE_VERIFY_FINGERPRINT);
-    }
+
+//    private void startVerifyActivityAfterCapture() {
+//        // Create a new intent for VerifyActivity
+//        Intent intent = new Intent(this, VerifyActivity.class);
+//        // Add the captured fingerprints to the intent
+//        intent.putExtra(VERIFYFINGER, capturedFinger);
+//        // Start VerifyActivity for result
+//        startActivityForResult(intent, REQUEST_CODE_VERIFY_FINGERPRINT);
+//    }
+
 
 
 
@@ -121,7 +114,12 @@ public class FpSensorActivity extends BaseActivity {
     // Change this to a 2D array to store two fingerprints
     private static byte[][] capturedFingerprints = new byte[2][];
 
-    private static byte[] capturedFinger = new byte[1];
+    private static byte[] capturedFinger = new byte[0];
+
+    public interface FingerprintDataReadyCallback {
+        void onFingerprintDataReady(byte[] fingerprintData);
+    }
+    private FingerprintDataReadyCallback callback;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -261,13 +259,17 @@ public class FpSensorActivity extends BaseActivity {
             verify_bt.setText(R.string.stop);
             capture_bt.setVisibility(View.GONE);
         }
-        else {
+        else if (capturing && deviceIsSet) {
+            rootView.setKeepScreenOn(false);
             morphoDevice = closeMorphoDevice(morphoDevice);
             verify_bt.setText(R.string.verify);
             capture_bt.setVisibility(View.VISIBLE);
 
             verifying = false;
             deviceIsSet = false;
+        }
+        else{
+            showToastMessage("Device is being initialized, please try again", Toast.LENGTH_SHORT);
         }
     }
 
@@ -553,12 +555,9 @@ public class FpSensorActivity extends BaseActivity {
 
                     if (nbTemplate == 1) {
                         Template template1 = templateList.getTemplate(0);
-
                         // Store the captured fingerprints in the class variable
                         capturedFinger = template1.getData();
-
                         msg += "Template successfully captured!";
-
                         final String alertMessage = msg;
 
                         // Dialog window to inform the user
@@ -574,7 +573,11 @@ public class FpSensorActivity extends BaseActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Call the returnFinger() method when the OK button is clicked
                                         returnFinger(capturedFinger);
-                                        startVerifyActivityAfterCapture(); // add this line
+//                                        startVerifyActivityAfterCapture(); // add this line
+                                        // Cancel the live acquisition of the fingerprint
+                                        morphoDevice.cancelLiveAcquisition();
+                                        // Dismiss the AlertDialog
+                                        dialog.dismiss();
                                     }
                                 });
                                 builder.show();

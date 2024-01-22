@@ -1,2 +1,0 @@
-ninja: Entering directory `C:\Users\Software Engineer\AndroidStudioProjects\BioCapture - Copy\MorphoLiveScan\.cxx\Debug\624d675e\arm64-v8a'
-ninja: no work to do.

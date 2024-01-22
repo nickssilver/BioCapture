@@ -42,7 +42,7 @@ public class VerifyActivity extends BaseActivity {
 
         // Set up the Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.16.97:5223/")
+                .baseUrl("http://192.168.6.155:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -72,6 +72,8 @@ public class VerifyActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String fingerprint = editTextFingerScan.getText().toString();
+
+
                 ConnectivityManager cm = (ConnectivityManager) ContextCompat.getSystemService(VerifyActivity.this, ConnectivityManager.class);
                 assert cm != null;
                 Network activeNetwork = cm.getActiveNetwork();
@@ -132,23 +134,18 @@ public class VerifyActivity extends BaseActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == REQUEST_CODE_VERIFY_FINGERPRINT && resultCode == RESULT_OK) {
-            // Fingerprint data is captured successfully
             // Retrieve fingerprint data from the intent extras
-            byte[] fingerprints = data.getByteArrayExtra(FpSensorActivity.VERIFYFINGER);
+            byte[] fingerprints = (byte[]) data.getSerializableExtra(FpSensorActivity.VERIFYFINGER);
             // Convert the fingerprint data to a Base64 string and set it in the EditText field
             String fingerprint = Base64.encodeToString(fingerprints, Base64.DEFAULT);
-            editTextFingerScan.setText(fingerprint);
+
+            editTextFingerScan.setText(new String(fingerprint));
         }
     }
-
-
-
     private static final int REQUEST_CODE_VERIFY_FINGERPRINT = 456;
-
-
 }

@@ -1,12 +1,21 @@
 package com.example.biocapture;
 
+import com.google.gson.annotations.SerializedName;
+
 public class RegisterStudentRequest {
+    @SerializedName("studentId")
     private String studentId;
+    @SerializedName("studentName")
     private String studentName;
+    @SerializedName("classId")
     private String classId;
+    @SerializedName("status")
     private String status;
+    @SerializedName("arrears")
     private double arrears;
+    @SerializedName("fingerprint1")
     private String fingerprint1;
+    @SerializedName("fingerprint2")
     private String fingerprint2;
 
     // Constructor
