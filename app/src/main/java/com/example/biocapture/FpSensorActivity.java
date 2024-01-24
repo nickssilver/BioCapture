@@ -68,23 +68,6 @@ public class FpSensorActivity extends BaseActivity {
         resultIntent.putExtra(VERIFYFINGER, fingerprints);
         setResult(RESULT_OK, resultIntent);
     }
-
-
-
-//    private void startVerifyActivityAfterCapture() {
-//        // Create a new intent for VerifyActivity
-//        Intent intent = new Intent(this, VerifyActivity.class);
-//        // Add the captured fingerprints to the intent
-//        intent.putExtra(VERIFYFINGER, capturedFinger);
-//        // Start VerifyActivity for result
-//        startActivityForResult(intent, REQUEST_CODE_VERIFY_FINGERPRINT);
-//    }
-
-
-
-
-
-
     private String TAG = "FpSensorActivity";
     private String title = "";
     private AppCompatTextView title_tv = null;

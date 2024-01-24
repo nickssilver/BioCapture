@@ -59,6 +59,7 @@ public class RegisterActivity extends BaseActivity {
         captureButton = findViewById(R.id.captureButton);
         submitButton = findViewById(R.id.buttonSubmitReg);
 
+        fingerprints = new byte[2][];
 
 
         // Set up the capture button
@@ -78,7 +79,7 @@ public class RegisterActivity extends BaseActivity {
 
         // Set up the Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http:192.168.137.156:5223/")
+                .baseUrl("http:192.168.7.8:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -202,8 +203,9 @@ public class RegisterActivity extends BaseActivity {
                 String status = statusEditText.getText().toString();
                 double arrears = Double.parseDouble(arrearsEditText.getText().toString());
 
-                String fingerprint1 = fingerprints != null && fingerprints.length > 0 ? Base64.encodeToString(fingerprints[0], Base64.DEFAULT) : "";
-                String fingerprint2 = fingerprints != null && fingerprints.length > 1 ? Base64.encodeToString(fingerprints[1], Base64.DEFAULT) : "";
+                String fingerprint1 = fingerprints != null && fingerprints.length > 0 ? Base64.encodeToString(fingerprints[0], Base64.NO_WRAP) : "";
+                String fingerprint2 = fingerprints != null && fingerprints.length > 1 ? Base64.encodeToString(fingerprints[1], Base64.NO_WRAP) : "";
+
 
 
 
@@ -268,7 +270,7 @@ public class RegisterActivity extends BaseActivity {
             }
             // Fingerprint data is captured successfully
             // Retrieve fingerprint data from the intent extras
-            byte[][] fingerprints = (byte[][]) data.getSerializableExtra(FpSensorActivity.EXTRA_FINGERPRINTS);
+             fingerprints = (byte[][]) data.getSerializableExtra(FpSensorActivity.EXTRA_FINGERPRINTS);
 
             // Set the raw fingerprint data as the text of the EditText fields
             editTextFingerprint1.setText(new String(fingerprints[0]));
