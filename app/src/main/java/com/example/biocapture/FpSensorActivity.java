@@ -602,11 +602,10 @@ public class FpSensorActivity extends BaseActivity {
                             match = "Matching score: " + resultMatching.getMatchingScore();
 
                             // Assuming only one template is used for verification
-                            // FingerprintTemplate matchedTemplate = templates.get(0);
-
+                            //FingerprintTemplate matchedTemplate = templates.get(0);
 
                             // Retrieve the matched template using the index
-                            int matchedIndex = resultMatching.getMatchedIndex();
+                            int matchedIndex = resultMatching.getMatchingPKNumber();
                             FingerprintTemplate matchedTemplate = templates.get(matchedIndex);
 
                             // Get the matched student's details

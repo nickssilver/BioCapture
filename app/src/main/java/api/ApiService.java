@@ -1,12 +1,13 @@
 package api;
 
+import com.example.biocapture.AuditLogs;
 import com.example.biocapture.FetchStudentData;
 import com.example.biocapture.FingerprintTemplate;
 import com.example.biocapture.RegisterStudentRequest;
-import com.example.biocapture.StudentDetails;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -27,7 +28,7 @@ public interface ApiService {
             "Content-Type: application/json"
     })
     @POST("Verification")
-    Call<StudentDetails> VerifyFingerprint(@Body String fingerprint);
+    Call<ResponseBody> postAuditLog(@Body AuditLogs log);
     @GET("Verification/GetAllFingerprintTemplates")
     Call<List<FingerprintTemplate>> getAllTemplatesFromDatabase();
 

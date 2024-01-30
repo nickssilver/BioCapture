@@ -55,26 +55,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-
-            <EditText
-                android:id="@+id/editTextFingerScan"
+            <Button
+                android:id="@+id/buttonFingerScan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="70dp"
                 android:layout_marginEnd="70dp"
-                android:drawableTop="@drawable/ic_fingerprint"
-                android:ems="10"
-                android:hint="Scan Your Finger"
-                android:inputType="text"
                 android:background="@null"
+                android:backgroundTint="@color/white"
+                android:drawableTop="@drawable/ic_fingerprint"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="10dp"
+                android:text="Scan Your Finger"
                 android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textColorHint="@color/grey"
-                android:textSize="20sp" />
+                android:textColor="@color/grey"
+                android:textSize="12sp" />
+
 
 
 
