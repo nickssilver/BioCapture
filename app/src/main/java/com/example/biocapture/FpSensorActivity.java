@@ -73,7 +73,7 @@ public class FpSensorActivity extends BaseActivity {
         new Thread(() -> {
             try {
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://172.20.10.3:5223/")
+                        .baseUrl("http://192.168.7.178:5223/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
