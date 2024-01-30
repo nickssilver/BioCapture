@@ -1,8 +1,11 @@
 package api;
 
 import com.example.biocapture.FetchStudentData;
+import com.example.biocapture.FingerprintTemplate;
 import com.example.biocapture.RegisterStudentRequest;
 import com.example.biocapture.StudentDetails;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,6 +28,7 @@ public interface ApiService {
     })
     @POST("Verification")
     Call<StudentDetails> VerifyFingerprint(@Body String fingerprint);
-
+    @GET("Verification/GetAllFingerprintTemplates")
+    Call<List<FingerprintTemplate>> getAllTemplatesFromDatabase();
 
 }

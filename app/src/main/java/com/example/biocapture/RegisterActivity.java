@@ -79,7 +79,7 @@ public class RegisterActivity extends BaseActivity {
 
         // Set up the Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http:192.168.7.8:5223/")
+                .baseUrl("http://172.20.10.3:5223/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
