@@ -10,6 +10,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -24,6 +25,9 @@ public interface ApiService {
 
     @GET("Registration/{studentId}") //actual endpoint on server on get student data
     Call<FetchStudentData> FetchStudentData(@Path("studentId") String studentId);
+
+    @DELETE("Registration/{studentId}")
+
     @Headers({
             "Content-Type: application/json"
     })

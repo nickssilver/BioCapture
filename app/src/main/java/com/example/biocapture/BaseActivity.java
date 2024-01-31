@@ -27,7 +27,7 @@ public class BaseActivity extends AppCompatActivity {
             startActivity(new Intent(this, VerifyActivity.class));
             return true;
         } else if (item.getItemId() == R.id.refactor) {
-            startActivity(new Intent(this, Refactor.class));
+            startActivity(new Intent(this, RefactorActivity.class));
             return true;
 
         } else {
