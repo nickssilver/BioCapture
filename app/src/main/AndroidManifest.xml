@@ -43,10 +43,7 @@
             android:name=".FpSensorActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".FpSensorActivityV"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name=".UsbManagementActivity"
             android:exported="false"

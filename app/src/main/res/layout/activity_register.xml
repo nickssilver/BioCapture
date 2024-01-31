@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input_bg"
                 android:ems="10"
-                android:hint="Adm No.."
+                android:hint="Input Adm No.."
                 android:inputType="text"
                 android:padding="10dp"
                 android:layout_marginTop="10dp"

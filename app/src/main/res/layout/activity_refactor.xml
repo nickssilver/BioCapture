@@ -26,12 +26,12 @@
             tools:ignore="MissingConstraints">
 
             <TextView
-                android:id="@+id/TouchId"
+                android:id="@+id/Refactor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Refactor"
                 android:textColor="@color/grey"
-                android:textSize="34sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input_bg"
                 android:ems="10"
-                android:hint="Adm No.."
+                android:hint="Input Student No:"
                 android:inputType="text"
                 android:padding="10dp"
                 android:layout_marginTop="10dp"
@@ -89,13 +89,14 @@
                 android:ems="50"
                 android:gravity="center"
                 android:focusable="false"
-                android:hint="Student Adm, Name, Class, Status"
+                android:hint="Student No:, Name:, ClassID:, Status:"
                 android:inputType="text"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:textAlignment="center"
                 android:textColorHint="@color/black"
                 android:textStyle="italic"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
@@ -104,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="130dp"
                 android:layout_marginEnd="130dp"
-                android:text="Delete"
+                android:text="Clear"
                 app:backgroundTint="@null"
                 android:textColor="@color/white"
                 android:background="@drawable/button_background"

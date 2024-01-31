@@ -64,7 +64,7 @@ public class VerifyActivity extends BaseActivity {
 
                 // Send the JSON to your server using a POST request
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.7.178:5223/")
+                        .baseUrl("http://192.168.7.178:83/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 

@@ -27,6 +27,8 @@ public interface ApiService {
     Call<FetchStudentData> FetchStudentData(@Path("studentId") String studentId);
 
     @DELETE("Registration/{studentId}")
+    Call<ResponseBody> deleteStudent(@Path("studentId") String studentId);
+
 
     @Headers({
             "Content-Type: application/json"
