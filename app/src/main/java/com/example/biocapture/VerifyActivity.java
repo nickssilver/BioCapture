@@ -47,7 +47,7 @@ public class VerifyActivity extends BaseActivity {
         String status = intent.getStringExtra("status");
 
         // Display data in EditText fields
-        editTextStudentDetails.setText(Html.fromHtml("ID: " + studentId + "<br>Name: " + studentName + "<br><br>Class ID: " + classId + "<br>Status: " + status));
+        editTextStudentDetails.setText(Html.fromHtml("{ID:} " + studentId + "<br>{Name:} " + studentName + "<br><br>{Class ID:} " + classId + "<br>{Status:} " + status));
         editTextArrears.setText("Arrears: " + arrears);
 
         // Set up the Save button
@@ -64,7 +64,7 @@ public class VerifyActivity extends BaseActivity {
 
                 // Send the JSON to your server using a POST request
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.7.178:83/")
+                        .baseUrl("http://192.168.0.208:83/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 

@@ -73,7 +73,7 @@ public class FpSensorActivity extends BaseActivity {
         new Thread(() -> {
             try {
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.7.178:83/")
+                        .baseUrl("http://192.168.0.208:83/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
@@ -234,7 +234,7 @@ public class FpSensorActivity extends BaseActivity {
             progressBar.setVisibility(View.VISIBLE);
             result_tv.setText("");
 
-            // Create a CountDownLatch with a count of 1
+            // A CountDownLatch with a count of 1
             final CountDownLatch latch = new CountDownLatch(1);
             // Capture the first fingerprint
             morphoDeviceCapture();
@@ -244,27 +244,30 @@ public class FpSensorActivity extends BaseActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    // Ensure the first finger is removed before capturing the second one
+                    // First finger is removed before capturing the second one
                     morphoDeviceCapture();
                 }
-
             }, 5000); // Delay of 5 seconds
             capture_bt.setText(R.string.stop);
             verify_bt.setVisibility(View.GONE);
         }
         else if (capturing && deviceIsSet) {
             rootView.setKeepScreenOn(false);
-
             morphoDevice = closeMorphoDevice(morphoDevice);
-
             capture_bt.setText(R.string.capture);
             verify_bt.setVisibility(View.VISIBLE);
 
             capturing = false;
             deviceIsSet = false;
         }
-        else{
-            showToastMessage("Device is being initialized, please try again", Toast.LENGTH_SHORT);
+        else {
+            // Show the dialog on the UI thread
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showToastMessage("Device is being initialized, please try again", Toast.LENGTH_SHORT);
+                }
+            });
         }
     }
 
