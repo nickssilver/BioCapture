@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import api.ApiService;
@@ -48,7 +49,12 @@ public class VerifyActivity extends BaseActivity {
 
         // Display data in EditText fields
         editTextStudentDetails.setText(Html.fromHtml("{ID:} " + studentId + "<br>{Name:} " + studentName + "<br><br>{Class ID:} " + classId + "<br>{Status:} " + status));
-        editTextArrears.setText("Arrears: " + arrears);
+
+        // Format arrears using DecimalFormat
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedArrears = decimalFormat.format(arrears);
+
+        editTextArrears.setText("Arrears: " + formattedArrears);
 
         // Set up the Save button
         buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +70,7 @@ public class VerifyActivity extends BaseActivity {
 
                 // Send the JSON to your server using a POST request
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.0.208:83/")
+                        .baseUrl("http://192.168.0.47:5000/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 

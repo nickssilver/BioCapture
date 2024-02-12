@@ -79,7 +79,7 @@ public class RegisterActivity extends BaseActivity {
 
         // Set up the Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.208:83/")
+                .baseUrl("http://192.168.0.47:5000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -240,7 +240,7 @@ public class RegisterActivity extends BaseActivity {
 
 
                         } else {
-                            Toast.makeText(RegisterActivity.this, "Registration failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Registration failed, Check Student is already registered : " + response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

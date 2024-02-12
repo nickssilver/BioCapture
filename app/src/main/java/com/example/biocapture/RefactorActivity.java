@@ -26,7 +26,7 @@ public class RefactorActivity extends AppCompatActivity {
     private EditText studentAdmn, editDetails;
     private Button buttonDelete;
 
-    private static final String BASE_URL = "http://192.168.0.208:83";
+    private static final String BASE_URL = "http://192.168.0.47:5000";
 
     private static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)

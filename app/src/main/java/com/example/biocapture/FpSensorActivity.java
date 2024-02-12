@@ -73,7 +73,7 @@ public class FpSensorActivity extends BaseActivity {
         new Thread(() -> {
             try {
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.0.208:83/")
+                        .baseUrl("http://192.168.0.47:5000/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
@@ -230,7 +230,6 @@ public class FpSensorActivity extends BaseActivity {
         if (!capturing){
             capturing = true;
             rootView.setKeepScreenOn(true);
-
             progressBar.setVisibility(View.VISIBLE);
             result_tv.setText("");
 
@@ -549,12 +548,16 @@ public class FpSensorActivity extends BaseActivity {
 
                 int callbackCmd = CallbackMask.MORPHO_CALLBACK_IMAGE_CMD.getValue()
                         | CallbackMask.MORPHO_CALLBACK_COMMAND_CMD.getValue();
-                final ResultMatching resultMatching = new ResultMatching();
 
-                // Use the passed templates for verification
-                TemplateList templateList = new TemplateList();
-                try {
-                    for (FingerprintTemplate template : templates) {
+
+                // Define the batch size
+                int batchSize = 10;
+                // Split templates into batches and process them
+                for (int i = 0; i < templates.size(); i += batchSize) {
+                    TemplateList templateBatch = new TemplateList();
+
+                    for (int j = i; j < Math.min(i + batchSize, templates.size()); j++) {
+                        FingerprintTemplate template = templates.get(j);
                         String fingerprint1Str = template.getFingerprint1();
                         String fingerprint2Str = template.getFingerprint2();
 
@@ -570,74 +573,74 @@ public class FpSensorActivity extends BaseActivity {
                         morphoTemplate2.setData(fingerprint2);
                         morphoTemplate2.setTemplateType(TemplateType.MORPHO_PK_ISO_FMR);
 
-                        templateList.putTemplate(morphoTemplate1);
-                        templateList.putTemplate(morphoTemplate2);
+                        templateBatch.putTemplate(morphoTemplate1);
+                        templateBatch.putTemplate(morphoTemplate2);
                     }
+                    // Reset resultMatching object
+                    final ResultMatching resultMatching = new ResultMatching();
+                    try {
+                        // Perform the verification process for each template
+                        ret = morphoDevice.verify(timeOut, far, coder, detectModeChoice, matchingStrategy,
+                                templateBatch, callbackCmd, processObserver, resultMatching);
 
-                    // Perform the verification process for each template
-                    ret = morphoDevice.verify(timeOut, far, coder, detectModeChoice, matchingStrategy,
-                            templateList, callbackCmd, processObserver, resultMatching);
-
-                    Log.d(TAG, "morphoDeviceVerify ret = " + ret);
-                    if (ret != ErrorCodes.MORPHO_OK) {
-                        String err = "";
-                        if (ret == ErrorCodes.MORPHOERR_TIMEOUT) {
-                            err = "Verify process failed: timeout";
-                        } else if (ret == ErrorCodes.MORPHOERR_CMDE_ABORTED) {
-                            err = "Verify process aborted";
-                        } else if (ret == ErrorCodes.MORPHOERR_UNAVAILABLE) {
-                            err = "Device is not available";
-                        } else if (ret == ErrorCodes.MORPHOERR_INVALID_FINGER || ret == ErrorCodes.MORPHOERR_NO_HIT) {
-                            err = "Authentication or Identification failed";
-                            match = "Template doesn't match";
+                        Log.d(TAG, "morphoDeviceVerify ret = " + ret);
+                        if (ret != ErrorCodes.MORPHO_OK) {
+                            String err = "";
+                            if (ret == ErrorCodes.MORPHOERR_TIMEOUT) {
+                                err = "Verify process failed: timeout";
+                            } else if (ret == ErrorCodes.MORPHOERR_CMDE_ABORTED) {
+                                err = "Verify process aborted";
+                            } else if (ret == ErrorCodes.MORPHOERR_UNAVAILABLE) {
+                                err = "Device is not available";
+                            } else if (ret == ErrorCodes.MORPHOERR_INVALID_FINGER || ret == ErrorCodes.MORPHOERR_NO_HIT) {
+                                err = "Authentication or Identification failed";
+                                match = "Fingerprint doesn't match";
+                            } else {
+                                err = "Error code is " + ret;
+                            }
+                            final String finalErr = err;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showToastMessage(finalErr, Toast.LENGTH_SHORT);
+                                }
+                            });
                         } else {
-                            err = "Error code is " + ret;
+                            if (resultMatching != null) {
+                                match = "Matching score: " + resultMatching.getMatchingScore();
+                              //if (resultMatching != null && resultMatching.getMatchingScore() >= matchingScoreThreshold) {
+                                // Retrieve the matched template using the index
+                                int matchedIndex = resultMatching.getMatchingPKNumber();
+                                FingerprintTemplate matchedTemplate = templates.get(matchedIndex);
+
+                                // Get the matched student's details
+                                String matchedStudentId = matchedTemplate.getStudentId();
+                                String matchedStudentName = matchedTemplate.getStudentName();
+                                double matchedArrears = matchedTemplate.getArrears();
+                                String matchedClassId = matchedTemplate.getClassId();
+                                String matchedStatus = matchedTemplate.getStatus();
+
+                                // Pass the information to the VerifyActivity
+                                Intent intent = new Intent(FpSensorActivity.this, VerifyActivity.class);
+                                intent.putExtra("studentId", matchedStudentId);
+                                intent.putExtra("studentName", matchedStudentName);
+                                intent.putExtra("arrears", matchedArrears);
+                                intent.putExtra("classId", matchedClassId);
+                                intent.putExtra("status", matchedStatus);
+                                startActivity(intent);
+                            }
                         }
-                        final String finalErr = err;
+                    } catch (Exception e) {
+                        // Handle unexpected exceptions during verification
+                        e.printStackTrace();
+                        final String exceptionMsg = "Exception during verification: " + e.getMessage();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showToastMessage(finalErr, Toast.LENGTH_SHORT);
+                                showToastMessage(exceptionMsg, Toast.LENGTH_SHORT);
                             }
                         });
-                    } else {
-                        if (resultMatching != null) {
-                            match = "Matching score: " + resultMatching.getMatchingScore();
-
-                            // Assuming only one template is used for verification
-                            //FingerprintTemplate matchedTemplate = templates.get(0);
-
-                            // Retrieve the matched template using the index
-                            int matchedIndex = resultMatching.getMatchingPKNumber();
-                            FingerprintTemplate matchedTemplate = templates.get(matchedIndex);
-
-                            // Get the matched student's details
-                            String matchedStudentId = matchedTemplate.getStudentId();
-                            String matchedStudentName = matchedTemplate.getStudentName();
-                            double matchedArrears = matchedTemplate.getArrears();
-                            String matchedClassId = matchedTemplate.getClassId();
-                            String matchedStatus = matchedTemplate.getStatus();
-
-                            // Pass the information to the VerifyActivity
-                            Intent intent = new Intent(FpSensorActivity.this, VerifyActivity.class);
-                            intent.putExtra("studentId", matchedStudentId);
-                            intent.putExtra("studentName", matchedStudentName);
-                            intent.putExtra("arrears", matchedArrears);
-                            intent.putExtra("classId", matchedClassId);
-                            intent.putExtra("status", matchedStatus);
-                            startActivity(intent);
-                        }
                     }
-                } catch (Exception e) {
-                    // Handle unexpected exceptions during verification
-                    e.printStackTrace();
-                    final String exceptionMsg = "Exception during verification: " + e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showToastMessage(exceptionMsg, Toast.LENGTH_SHORT);
-                        }
-                    });
                 }
 
                 final String finalMatch = match;
