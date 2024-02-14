@@ -26,34 +26,34 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
 
-
         <LinearLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/rounded_corners"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
             android:layout_marginStart="30dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="30dp"
-            app:layout_constraintTop_toBottomOf="@+id/Verification"
+            android:background="@drawable/rounded_corners"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/Verification">
 
             <TextView
                 android:id="@+id/TouchId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:text="TouchID"
                 android:textColor="@color/grey"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center"
-                app:layout_constraintTop_toBottomOf="@+id/Registration"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/Registration" />
+
 
             <Button
                 android:id="@+id/buttonFingerScan"
@@ -68,28 +68,25 @@
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="10dp"
-                android:text="Scan Your Finger"
+                android:text="Click to Verify"
                 android:textAlignment="center"
                 android:textColor="@color/grey"
                 android:textSize="12sp" />
-
-
-
 
             <TextView
                 android:id="@+id/StudentDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:text="Student Details"
                 android:textAlignment="center"
                 android:textColor="@color/grey"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_gravity="center"
-                app:layout_constraintTop_toBottomOf="@+id/editTextArrears"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextArrears" />
 
             <EditText
                 android:id="@+id/editTextStudentDetails"
@@ -102,8 +99,8 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/input_bg"
                 android:ems="50"
-                android:gravity="center"
                 android:focusable="false"
+                android:gravity="center"
                 android:hint="Student No:, Name:, ClassId:, Status:"
                 android:inputType="text"
                 android:minWidth="48dp"
@@ -118,54 +115,53 @@
                 android:id="@+id/textViewArrears"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="Arrears"
                 android:textAlignment="center"
                 android:textColor="@color/grey"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_gravity="center"
-                app:layout_constraintTop_toBottomOf="@+id/editTextArrears"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextArrears" />
+
             <EditText
                 android:id="@+id/editTextArrears"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="text"
-                android:textAlignment="center"
-                android:focusable="false"
-                android:hint="Fees Balance.."
-                android:textColorHint="@color/black"
-                android:textStyle="italic"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                app:layout_constraintTop_toBottomOf="@+id/editTextStudentDetails"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:ems="10"
+                android:focusable="false"
+                android:hint="Fees Balance.."
+                android:inputType="text"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textColorHint="@color/black"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextStudentDetails" />
 
             <Button
                 android:id="@+id/buttonSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="130dp"
-                android:layout_marginEnd="130dp"
-                android:text="Save"
-                app:backgroundTint="@null"
-                android:textColor="@color/white"
-                android:background="@drawable/button_background"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="130dp"
                 android:layout_marginBottom="20dp"
+                android:background="@drawable/button_background"
+                android:text="Save"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textSize="30sp"
+                app:backgroundTint="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
         </LinearLayout>
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

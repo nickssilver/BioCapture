@@ -608,7 +608,7 @@ public class FpSensorActivity extends BaseActivity {
                         } else {
                             if (resultMatching != null) {
                                 match = "Matching score: " + resultMatching.getMatchingScore();
-                              //if (resultMatching != null && resultMatching.getMatchingScore() >= matchingScoreThreshold) {
+                                //if (resultMatching != null && resultMatching.getMatchingScore() >= matchingScoreThreshold) {
                                 // Retrieve the matched template using the index
                                 int matchedIndex = resultMatching.getMatchingPKNumber();
                                 FingerprintTemplate matchedTemplate = templates.get(matchedIndex);
@@ -662,7 +662,6 @@ public class FpSensorActivity extends BaseActivity {
 
         commandThread.start();
     }
-
     @Override
     protected void onPause() {
         super.onPause();
