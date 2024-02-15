@@ -36,4 +36,11 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="username">admin username</string>
+    <string name="password">admin password</string>
+    <string name="userid">UserID</string>
+    <string name="name">Username</string>
+    <string name="department">Department</string>
+    <string name="pin">User Pin</string>
+    <string name="contact">Contact</string>
 </resources>

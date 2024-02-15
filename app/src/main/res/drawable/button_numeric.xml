@@ -20,14 +20,4 @@
         </shape>
     </item>
 </layer-list>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="true">
-        <shape>
-            <gradient
-                android:startColor="#E67E22  "
-                android:endColor="#D35454"
-                android:angle="65"/>
-            <corners android:radius="10dp" />
-        </shape>
-    </item>
-</selector>
+

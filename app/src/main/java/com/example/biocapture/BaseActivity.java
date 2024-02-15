@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.biocapture.Administer.AdminActivity;
+import com.example.biocapture.Administer.LoginActivity;
+
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -28,6 +31,12 @@ public class BaseActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.refactor) {
             startActivity(new Intent(this, RefactorActivity.class));
+            return true;
+        } else if (item.getItemId() == R.id.analytics) {
+            startActivity(new Intent(this, AdminActivity.class));
+            return true;
+        } else if (item.getItemId() == R.id.login) {
+            startActivity(new Intent(this, LoginActivity.class));
             return true;
 
         } else {

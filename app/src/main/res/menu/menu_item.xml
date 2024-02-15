@@ -21,6 +21,16 @@
                             android:title="Refactor"
                             app:showAsAction="never"
                             android:icon="@drawable/baseline_restore_24"/>
+                        <item
+                            android:id="@+id/analytics"
+                            android:title="Analytics"
+                            app:showAsAction="never"
+                            android:icon="@drawable/baseline_analytics"/>
+                        <item
+                            android:id="@+id/login"
+                            android:title="Login"
+                            app:showAsAction="never"
+                            android:icon="@drawable/baseline_account_circle"/>
 
 
                 </menu>
