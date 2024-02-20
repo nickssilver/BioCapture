@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.biocapture.Administer.AdminActivity;
 import com.example.biocapture.Administer.LoginActivity;
+import com.example.biocapture.Analytics.AnalyticsActivity;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -33,6 +34,9 @@ public class BaseActivity extends AppCompatActivity {
             startActivity(new Intent(this, RefactorActivity.class));
             return true;
         } else if (item.getItemId() == R.id.analytics) {
+            startActivity(new Intent(this, AnalyticsActivity.class));
+            return true;
+        } else if (item.getItemId() == R.id.manage) {
             startActivity(new Intent(this, AdminActivity.class));
             return true;
         } else if (item.getItemId() == R.id.login) {

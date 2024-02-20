@@ -89,7 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/table_border">
+               >
 
                 <!-- Table Row for Column Headers -->
                 <TableRow
@@ -147,10 +147,18 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:padding="8dp" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Action"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:padding="8dp" />
                 </TableRow>
 
-                <!-- Sample Row (You can dynamically add rows programmatically) -->
-                !--
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -200,8 +208,15 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:padding="8dp" />
+                    <Spinner
+                        android:id="@+id/actionSpinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+
                 </TableRow>
-                -->
+
             </TableLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

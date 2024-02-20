@@ -25,11 +25,16 @@
         android:theme="@style/Theme.BioCapture"
         tools:targetApi="31">
         <activity
-            android:name=".Administer.AdminActivity"
+            android:name=".Biousers"
             android:exported="false" />
         <activity
+            android:name=".Administer.AdminActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.Light" />
+        <activity
             android:name=".Analytics.AnalyticsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Design.Light" />
         <activity
             android:name=".Administer.LoginActivity"
             android:exported="false" />

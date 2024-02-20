@@ -39,5 +39,31 @@ android:padding="16dp">
         android:inputType="text"
         android:hint="@string/contact" />
 
+    <CheckBox
+        android:id="@+id/registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/permission1" />
+
+    <CheckBox
+        android:id="@+id/verifier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/permission2" />
+
+    <CheckBox
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/permission3" />
+
+    <CheckBox
+        android:id="@+id/reports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/permission4" />
+
+
+
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import com.example.biocapture.AuditLogs;
 import com.example.biocapture.FetchStudentData;
 import com.example.biocapture.FingerprintTemplate;
 import com.example.biocapture.RegisterStudentRequest;
+import com.example.biocapture.RegisterViewModel;
 
 import java.util.List;
 
@@ -37,5 +38,8 @@ public interface ApiService {
     Call<ResponseBody> postAuditLog(@Body AuditLogs log);
     @GET("Verification/GetAllFingerprintTemplates")
     Call<List<FingerprintTemplate>> getAllTemplatesFromDatabase();
+
+    @POST("register")
+    Call<Void> registerUser(@Body RegisterViewModel registerViewModel);
 
 }
