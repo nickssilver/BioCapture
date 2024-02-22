@@ -1,6 +1,8 @@
 package api;
 
+import com.example.biocapture.Administer.AdminLoginRequest;
 import com.example.biocapture.AuditLogs;
+import com.example.biocapture.Biousers;
 import com.example.biocapture.FetchStudentData;
 import com.example.biocapture.FingerprintTemplate;
 import com.example.biocapture.RegisterStudentRequest;
@@ -18,6 +20,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ApiService {
+//Registration Endpoints
     @Headers({
             "Content-Type: application/json"
     })
@@ -30,7 +33,7 @@ public interface ApiService {
     @DELETE("Registration/{studentId}")
     Call<ResponseBody> deleteStudent(@Path("studentId") String studentId);
 
-
+//Verification Endpoints
     @Headers({
             "Content-Type: application/json"
     })
@@ -39,7 +42,13 @@ public interface ApiService {
     @GET("Verification/GetAllFingerprintTemplates")
     Call<List<FingerprintTemplate>> getAllTemplatesFromDatabase();
 
-    @POST("register")
-    Call<Void> registerUser(@Body RegisterViewModel registerViewModel);
+//Administration Endpoints
+    @Headers({
+            "Content-Type: application/json"
+    })
+    @POST("Users/register")
+    Call<Biousers> registerUser(@Body RegisterViewModel registerViewModel);
+    @POST("admin/login")
+    Call<Void> adminLogin(@Body AdminLoginRequest adminLoginRequest);
 
 }

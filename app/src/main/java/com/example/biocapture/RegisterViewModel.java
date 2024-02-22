@@ -1,13 +1,12 @@
 package com.example.biocapture;
 
-import java.security.Permissions;
 import java.util.List;
 
 public class RegisterViewModel {
     private Biousers user;
-    private List<Permissions> permissions;
+    private List<Biousers.Permissions> permissions;
 
-    // Getters and setters for user and permissions
+    // Getter and setter for user
     public Biousers getUser() {
         return user;
     }
@@ -16,12 +15,12 @@ public class RegisterViewModel {
         this.user = user;
     }
 
-    public List<Permissions> getPermissions() {
+    // Getter and setter for permissions
+    public List<Biousers.Permissions> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<Permissions> permissions) {
+    public void setPermissions(List<Biousers.Permissions> permissions) {
         this.permissions = permissions;
     }
 }
-

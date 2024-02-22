@@ -1,12 +1,21 @@
 package com.example.biocapture;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Biousers {
+    @SerializedName("UserId")
     private String userId;
+    @SerializedName("Name")
     private String name;
+    @SerializedName("Department")
     private String department;
+    @SerializedName("Pin")
     private String pin;
+    @SerializedName("Contact")
     private String contact;
-    private int permissions;
+    @SerializedName("Permissions")
+    private Permissions permissions;
+
 
     // Getters and setters for each field
     public String getUserId() {
@@ -49,12 +58,29 @@ public class Biousers {
         this.contact = contact;
     }
 
-    public int getPermissions() {
+    public Permissions getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(int permissions) {
+    public void setPermissions(Permissions permissions) {
         this.permissions = permissions;
     }
 
+    public enum Permissions {
+        None(0),
+        Page1(1),
+        Page2(2),
+        Page3(4),
+        Page4(8);
+
+        private final int value;
+
+        Permissions(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 }

@@ -1,17 +1,26 @@
 package com.example.biocapture.Administer;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.biocapture.BaseActivity;
 import com.example.biocapture.R;
+
+import api.ApiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends BaseActivity {
 
@@ -110,7 +119,9 @@ public class LoginActivity extends BaseActivity {
                 EditText passwordField = dialogLayout.findViewById(R.id.password);
                 String username = usernameField.getText().toString();
                 String password = passwordField.getText().toString();
-                // Handle login logic here
+
+                // Call method to authenticate user using API
+                authenticateUser(username, password);
             }
         });
 
@@ -126,4 +137,44 @@ public class LoginActivity extends BaseActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    private void authenticateUser(String username, String password) {
+        // Create Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.2.38:5223/") // Update with your actual backend URL
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        // Create API service interface
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        // Create login request body
+        AdminLoginRequest adminLoginRequest = new AdminLoginRequest(username, password);
+
+        // Send login request
+        Call<Void> call = apiService.adminLogin(adminLoginRequest);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Login successful, navigate to AdminActivity
+                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                    startActivity(intent);
+                    finish(); // Finish the current activity to prevent going back to login
+                } else {
+                    // Login failed, show error message
+                    Toast.makeText(LoginActivity.this, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle failure (e.g., network error)
+                Toast.makeText(LoginActivity.this, "Failed to connect to server. Please try again later.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
 }
