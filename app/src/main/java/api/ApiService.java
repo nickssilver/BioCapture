@@ -48,7 +48,7 @@ public interface ApiService {
     })
     @POST("Users/register")
     Call<Biousers> registerUser(@Body RegisterViewModel registerViewModel);
-    @POST("admin/login")
+    @POST("AdminAuth/login")
     Call<Void> adminLogin(@Body AdminLoginRequest adminLoginRequest);
 
 }
