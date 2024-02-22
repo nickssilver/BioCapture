@@ -13,13 +13,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.biocapture.BaseActivity;
-import com.example.biocapture.Biousers;
 import com.example.biocapture.R;
-import com.example.biocapture.RegisterViewModel;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import api.ApiService;
 import retrofit2.Call;
@@ -66,8 +62,6 @@ public class AdminActivity extends BaseActivity {
         CheckBox delete = dialogLayout.findViewById(R.id.delete);
         CheckBox reports = dialogLayout.findViewById(R.id.reports);
 
-
-        Biousers user = new Biousers();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Register User");
         builder.setView(dialogLayout);
@@ -79,36 +73,40 @@ public class AdminActivity extends BaseActivity {
             String pin = pinField.getText().toString();
             String contact = contactField.getText().toString();
 
-            // Calculate permissions
-            RegisterViewModel registerViewModel = new RegisterViewModel();
-            registerViewModel.setUser(user);
-            List<Biousers.Permissions> permissionsList = new ArrayList<>();
-            if (registration.isChecked()) permissionsList.add(Biousers.Permissions.Page1);
-            if (verifier.isChecked()) permissionsList.add(Biousers.Permissions.Page2);
-            if (delete.isChecked()) permissionsList.add(Biousers.Permissions.Page3);
-            if (reports.isChecked()) permissionsList.add(Biousers.Permissions.Page4);
-            registerViewModel.setPermissions(permissionsList);
 
+            // Create a new Biousers object
+            Biousers user = new Biousers(userid, name, department, pin, contact, 0);
+
+            // Set permissions based on CheckBox values
+            int permissions = 0;
+            if (registration.isChecked()) permissions |= Biousers.Permissions.Page1.getValue();
+            if (verifier.isChecked()) permissions |= Biousers.Permissions.Page2.getValue();
+            if (delete.isChecked()) permissions |= Biousers.Permissions.Page3.getValue();
+            if (reports.isChecked()) permissions |= Biousers.Permissions.Page4.getValue();
+            user.setPermissions(permissions);
+
+            // Create Retrofit instance
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://192.168.2.38:5223/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
+            // Create ApiService instance
             ApiService apiService = retrofit.create(ApiService.class);
 
-            Call<Biousers> call = apiService.registerUser(registerViewModel);
+            // Make a POST request to register the user
+            Call<Biousers> call = apiService.registerUser(user);
             call.enqueue(new Callback<Biousers>() {
-
                 @Override
                 public void onResponse(Call<Biousers> call, Response<Biousers> response) {
                     if (response.isSuccessful()) {
                         Biousers registeredUser = response.body();
-                        runOnUiThread(() -> Toast.makeText(AdminActivity.this, "User registered successfully: " + registeredUser.getUserId(), Toast.LENGTH_SHORT).show());
+                        Toast.makeText(AdminActivity.this, "User registered successfully: " + registeredUser.getUserId(), Toast.LENGTH_SHORT).show();
                     } else {
                         try {
                             String errorBody = response.errorBody().string();
                             Log.e("Registration Error", errorBody);
-                            runOnUiThread(() -> Toast.makeText(AdminActivity.this, "Registration failed: " + errorBody, Toast.LENGTH_SHORT).show());
+                            Toast.makeText(AdminActivity.this, "Registration failed: " + errorBody, Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
                             Log.e("Registration Error", "Failed to get error message", e);
                         }
@@ -117,10 +115,8 @@ public class AdminActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(Call<Biousers> call, Throwable t) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(AdminActivity.this, "Network error, please try again", Toast.LENGTH_SHORT).show();
-                        Log.e("Network Error", t.getMessage(), t);
-                    });
+                    Toast.makeText(AdminActivity.this, "Network error, please try again", Toast.LENGTH_SHORT).show();
+                    Log.e("Network Error", t.getMessage(), t);
                 }
             });
         });

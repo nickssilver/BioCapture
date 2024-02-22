@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_gravity="center"
         android:layout_margin="6dp"
         android:layout_marginTop="36dp"
@@ -68,11 +68,12 @@
             android:background="@drawable/input_login"
             android:ems="4"
             android:gravity="center"
+            android:focusable="false"
             android:inputType="numberPassword"
             android:maxLength="1"
             android:textStyle="bold"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
+            android:textSize="44sp"
             />
 
         <EditText
@@ -84,11 +85,12 @@
             android:background="@drawable/input_login"
             android:ems="4"
             android:gravity="center"
+            android:focusable="false"
             android:inputType="numberPassword"
             android:maxLength="1"
             android:textStyle="bold"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
+            android:textSize="44sp"
             />
 
         <EditText
@@ -100,11 +102,12 @@
             android:background="@drawable/input_login"
             android:ems="4"
             android:gravity="center"
+            android:focusable="false"
             android:inputType="numberPassword"
             android:maxLength="1"
             android:textStyle="bold"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
+            android:textSize="44sp"
             />
 
         <EditText
@@ -116,11 +119,12 @@
             android:background="@drawable/input_login"
             android:ems="4"
             android:gravity="center"
+            android:focusable="false"
             android:inputType="numberPassword"
             android:maxLength="1"
             android:textStyle="bold"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
+            android:textSize="44sp"
             />
     </LinearLayout>
 

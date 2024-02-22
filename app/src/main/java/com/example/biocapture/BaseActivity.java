@@ -39,7 +39,7 @@ public class BaseActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.manage) {
             startActivity(new Intent(this, AdminActivity.class));
             return true;
-        } else if (item.getItemId() == R.id.login) {
+        } else if (item.getItemId() == R.id.logout) {
             startActivity(new Intent(this, LoginActivity.class));
             return true;
 

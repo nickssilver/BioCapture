@@ -1,12 +1,11 @@
 package api;
 
 import com.example.biocapture.Administer.AdminLoginRequest;
+import com.example.biocapture.Administer.Biousers;
 import com.example.biocapture.AuditLogs;
-import com.example.biocapture.Biousers;
 import com.example.biocapture.FetchStudentData;
 import com.example.biocapture.FingerprintTemplate;
 import com.example.biocapture.RegisterStudentRequest;
-import com.example.biocapture.RegisterViewModel;
 
 import java.util.List;
 
@@ -18,6 +17,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 //Registration Endpoints
@@ -46,9 +46,12 @@ public interface ApiService {
     @Headers({
             "Content-Type: application/json"
     })
-    @POST("Users/register")
-    Call<Biousers> registerUser(@Body RegisterViewModel registerViewModel);
     @POST("AdminAuth/login")
     Call<Void> adminLogin(@Body AdminLoginRequest adminLoginRequest);
+    @POST("Users/authenticate")
+    Call<Void> authenticateUser(@Query("pin") String pin);
+
+    @POST("Users/register")
+    Call<Biousers> registerUser(@Body Biousers user);
 
 }

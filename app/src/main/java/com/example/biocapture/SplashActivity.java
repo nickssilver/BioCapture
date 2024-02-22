@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.biocapture.Administer.LoginActivity;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -15,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent =  new Intent(SplashActivity.this, VerifyActivity.class);
+                Intent intent =  new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

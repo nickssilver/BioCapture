@@ -69,10 +69,26 @@ public class LoginActivity extends BaseActivity {
                         break;
                     }
                 }
+                // Check if all four digits are entered
+                if (allPinsEntered()) {
+                    // Concatenate the entered digits to form the PIN
+                    String pin = "";
+                    for (EditText pinInput : pinInputs) {
+                        pin += pinInput.getText();
+                    }
+                    authenticateUser(pin); // Call the method to authenticate the user
+                }
             });
         }
     }
-
+    private boolean allPinsEntered() {
+        for (EditText pinInput : pinInputs) {
+            if (TextUtils.isEmpty(pinInput.getText())) {
+                return false;
+            }
+        }
+        return true;
+    }
     private void focusNextPinInput(EditText currentPinInput) {
         // Find the index of the current pin input EditText
         int currentIndex = -1;
@@ -121,7 +137,7 @@ public class LoginActivity extends BaseActivity {
                 String password = passwordField.getText().toString();
 
                 // Call method to authenticate user using API
-                authenticateUser(username, password);
+                authenticateAdmin(username, password);
             }
         });
 
@@ -137,8 +153,46 @@ public class LoginActivity extends BaseActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+    private void authenticateUser(String pin) {
+        // Create Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.2.38:5223/") // Update with your actual backend URL
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-    private void authenticateUser(String username, String password) {
+        // Create API service interface
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        // Create authentication request body
+        UserLoginRequest userLoginRequest = new UserLoginRequest(pin);
+
+        // Send authentication request
+        Call<Void> call = apiService.authenticateUser(pin);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Authentication successful, navigate to AdminActivity
+                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                    startActivity(intent);
+                    finish(); // Finish the current activity to prevent going back to login
+                } else {
+                    // Authentication failed, show error message
+                    Toast.makeText(LoginActivity.this, "Invalid PIN. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle failure (e.g., network error)
+                Toast.makeText(LoginActivity.this, "Failed to connect to server. Please try again later.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+    private void authenticateAdmin(String username, String password) {
         // Create Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://192.168.2.38:5223/") // Update with your actual backend URL

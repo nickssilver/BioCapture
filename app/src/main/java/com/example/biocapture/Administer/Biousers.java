@@ -1,23 +1,37 @@
-package com.example.biocapture;
+package com.example.biocapture.Administer;
 
 import com.google.gson.annotations.SerializedName;
 
 public class Biousers {
-    @SerializedName("UserId")
+    @SerializedName("userId")
     private String userId;
-    @SerializedName("Name")
+
+    @SerializedName("name")
     private String name;
-    @SerializedName("Department")
+
+    @SerializedName("department")
     private String department;
-    @SerializedName("Pin")
+
+    @SerializedName("pin")
     private String pin;
-    @SerializedName("Contact")
+
+    @SerializedName("contact")
     private String contact;
-    @SerializedName("Permissions")
-    private Permissions permissions;
 
+    @SerializedName("permissions")
+    private int permissions; // Change to int to match the backend
 
-    // Getters and setters for each field
+    // Constructor, getters, and setters
+
+    public Biousers(String userId, String name, String department, String pin, String contact, int permissions) {
+        this.userId = userId;
+        this.name = name;
+        this.department = department;
+        this.pin = pin;
+        this.contact = contact;
+        this.permissions = permissions;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -58,20 +72,23 @@ public class Biousers {
         this.contact = contact;
     }
 
-    public Permissions getPermissions() {
+    public int getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Permissions permissions) {
+    public void setPermissions(int permissions) {
         this.permissions = permissions;
     }
 
     public enum Permissions {
-        None(0),
-        Page1(1),
-        Page2(2),
-        Page3(4),
-        Page4(8);
+        @SerializedName("Page1")
+        Page1(0),
+        @SerializedName("Page2")
+        Page2(1),
+        @SerializedName("Page3")
+        Page3(2),
+        @SerializedName("Page4")
+        Page4(3);
 
         private final int value;
 

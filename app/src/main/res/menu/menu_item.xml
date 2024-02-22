@@ -32,10 +32,10 @@
                             app:showAsAction="never"
                             android:icon="@drawable/baseline_admin"/>
                         <item
-                            android:id="@+id/login"
-                            android:title="Login"
+                            android:id="@+id/logout"
+                            android:title="Log Out"
                             app:showAsAction="never"
-                            android:icon="@drawable/baseline_account_circle"/>
+                            android:icon="@drawable/baseline_logout"/>
 
 
                 </menu>
