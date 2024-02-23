@@ -2,6 +2,7 @@ package api;
 
 import com.example.biocapture.Administer.AdminLoginRequest;
 import com.example.biocapture.Administer.Biousers;
+import com.example.biocapture.Administer.PermissionsResponse;
 import com.example.biocapture.AuditLogs;
 import com.example.biocapture.FetchStudentData;
 import com.example.biocapture.FingerprintTemplate;
@@ -49,7 +50,8 @@ public interface ApiService {
     @POST("AdminAuth/login")
     Call<Void> adminLogin(@Body AdminLoginRequest adminLoginRequest);
     @POST("Users/authenticate")
-    Call<Void> authenticateUser(@Query("pin") String pin);
+    Call<PermissionsResponse> authenticateUser(@Query("pin") String pin);
+
 
     @POST("Users/register")
     Call<Biousers> registerUser(@Body Biousers user);

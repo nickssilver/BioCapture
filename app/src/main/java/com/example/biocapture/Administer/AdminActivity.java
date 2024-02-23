@@ -59,8 +59,9 @@ public class AdminActivity extends BaseActivity {
         // Initialize CheckBox fields
         CheckBox registration = dialogLayout.findViewById(R.id.registration);
         CheckBox verifier = dialogLayout.findViewById(R.id.verifier);
-        CheckBox delete = dialogLayout.findViewById(R.id.delete);
-        CheckBox reports = dialogLayout.findViewById(R.id.reports);
+        CheckBox refactor = dialogLayout.findViewById(R.id.refactor);
+        CheckBox analytics = dialogLayout.findViewById(R.id.analytics);
+        CheckBox management = dialogLayout.findViewById(R.id.management);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Register User");
@@ -75,15 +76,10 @@ public class AdminActivity extends BaseActivity {
 
 
             // Create a new Biousers object
-            Biousers user = new Biousers(userid, name, department, pin, contact, 0);
-
-            // Set permissions based on CheckBox values
-            int permissions = 0;
-            if (registration.isChecked()) permissions |= Biousers.Permissions.Page1.getValue();
-            if (verifier.isChecked()) permissions |= Biousers.Permissions.Page2.getValue();
-            if (delete.isChecked()) permissions |= Biousers.Permissions.Page3.getValue();
-            if (reports.isChecked()) permissions |= Biousers.Permissions.Page4.getValue();
-            user.setPermissions(permissions);
+            Biousers user = new Biousers(userid, name, department, pin, contact,
+                    registration.isChecked(), verifier.isChecked(),
+                    refactor.isChecked(), analytics.isChecked(),
+                    management.isChecked());
 
             // Create Retrofit instance
             Retrofit retrofit = new Retrofit.Builder()

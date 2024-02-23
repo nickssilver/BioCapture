@@ -43,25 +43,32 @@ android:padding="16dp">
         android:id="@+id/registration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/permission1" />
+        android:text="Register"/>
 
     <CheckBox
         android:id="@+id/verifier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/permission2" />
+        android:text="Verify"/>
 
     <CheckBox
-        android:id="@+id/delete"
+        android:id="@+id/refactor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/permission3" />
+        android:text="Refactor"/>
 
     <CheckBox
-        android:id="@+id/reports"
+        android:id="@+id/analytics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/permission4" />
+        android:text="Analytics"/>
+
+    <CheckBox
+        android:id="@+id/management"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Management"/>
+
 
 
 

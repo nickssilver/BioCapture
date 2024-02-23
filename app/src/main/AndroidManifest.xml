@@ -25,6 +25,9 @@
         android:theme="@style/Theme.BioCapture"
         tools:targetApi="31">
         <activity
+            android:name=".DefaultActivity"
+            android:exported="false" />
+        <activity
             android:name=".Administer.Biousers"
             android:exported="false" />
         <activity
@@ -40,7 +43,8 @@
             android:exported="false" />
         <activity
             android:name=".RefactorActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Design.Light"/>
         <activity
             android:name=".MainActivity"
             android:exported="false" />
