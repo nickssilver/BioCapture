@@ -9,7 +9,7 @@ android:padding="16dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="User ID"
+        android:text="User ID*"
         android:textColor="@color/grey"
         android:textSize="18sp"
         android:textStyle="normal"/>
@@ -25,7 +25,7 @@ android:padding="16dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:text="Name*"
         android:textColor="@color/grey"
         android:textSize="18sp"
         android:textStyle="normal"/>
@@ -41,7 +41,7 @@ android:padding="16dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Department"
+        android:text="Department*"
         android:textColor="@color/grey"
         android:textSize="18sp"
         android:textStyle="normal"/>
@@ -57,7 +57,7 @@ android:padding="16dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PIN"
+        android:text="PIN*"
         android:textColor="@color/grey"
         android:textSize="18sp"
         android:textStyle="normal"/>
@@ -73,7 +73,7 @@ android:padding="16dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Contact"
+        android:text="Contact*"
         android:textColor="@color/grey"
         android:textSize="18sp"
         android:textStyle="normal"/>

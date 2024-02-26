@@ -70,13 +70,18 @@ public class AdminActivity extends BaseActivity {
         builder.setView(dialogLayout);
 
         builder.setPositiveButton("Submit", (dialog, which) -> {
+            //Get the input values
             String userid = useridField.getText().toString();
             String name = nameField.getText().toString();
             String department = departmentField.getText().toString();
             String pin = pinField.getText().toString();
             String contact = contactField.getText().toString();
 
-
+            // Check if any of the fields are empty
+            if (userid.isEmpty() || name.isEmpty() || department.isEmpty() || pin.isEmpty() || contact.isEmpty()) {
+                Toast.makeText(AdminActivity.this, "All fields are Mandatory", Toast.LENGTH_SHORT).show();
+                return; // Don't proceed with registration
+            }
             // Create a new Biousers object
             Biousers user = new Biousers(userid, name, department, pin, contact,
                     registration.isChecked(), verifier.isChecked(),
