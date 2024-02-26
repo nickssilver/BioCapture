@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.biocapture.BaseActivity;
 import com.example.biocapture.R;
+import com.example.biocapture.RetrofitClient;
 
 import java.io.IOException;
 
@@ -22,9 +23,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AdminActivity extends BaseActivity {
+
+    private ApiService apiService;
 
     private EditText useridField;
     private EditText nameField;
@@ -64,7 +66,7 @@ public class AdminActivity extends BaseActivity {
         CheckBox management = dialogLayout.findViewById(R.id.management);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Register User");
+        builder.setTitle("User Registration");
         builder.setView(dialogLayout);
 
         builder.setPositiveButton("Submit", (dialog, which) -> {
@@ -81,14 +83,9 @@ public class AdminActivity extends BaseActivity {
                     refactor.isChecked(), analytics.isChecked(),
                     management.isChecked());
 
-            // Create Retrofit instance
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.2.38:5223/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            // Create ApiService instance
-            ApiService apiService = retrofit.create(ApiService.class);
+            // Initialize apiService
+            Retrofit retrofit = RetrofitClient.getClient();
+            apiService = retrofit.create(ApiService.class);
 
             // Make a POST request to register the user
             Call<Biousers> call = apiService.registerUser(user);

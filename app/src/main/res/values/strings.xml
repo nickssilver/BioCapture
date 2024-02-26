@@ -39,10 +39,10 @@
     <string name="username">admin username</string>
     <string name="password">admin password</string>
     <string name="userid">UserID</string>
-    <string name="name">Name</string>
-    <string name="department">Department</string>
-    <string name="pin">User Pin</string>
-    <string name="contact">Contact</string>
+    <string name="name">Input Name</string>
+    <string name="department">Input Department</string>
+    <string name="pin">4 digit</string>
+    <string name="contact">07000...</string>
     <string name="permission1">Registration</string>
     <string name="permission2">Verification</string>
     <string name="permission3">Refactor</string>

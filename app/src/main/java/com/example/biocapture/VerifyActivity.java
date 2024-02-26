@@ -20,9 +20,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class VerifyActivity extends BaseActivity {
+
+    private ApiService apiService;
 
     EditText editTextStudentDetails, editTextArrears;
     Button buttonSave, buttonFingerScan;
@@ -69,12 +70,8 @@ public class VerifyActivity extends BaseActivity {
 
 
                 // Send the JSON to your server using a POST request
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.0.47:5000/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                ApiService apiService = retrofit.create(ApiService.class);
+                Retrofit retrofit = RetrofitClient.getClient();
+                apiService = retrofit.create(ApiService.class);
                 Call<ResponseBody> call = apiService.postAuditLog(log);
 
                 call.enqueue(new Callback<ResponseBody>() {

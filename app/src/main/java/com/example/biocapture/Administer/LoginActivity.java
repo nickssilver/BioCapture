@@ -19,6 +19,7 @@ import com.example.biocapture.DefaultActivity;
 import com.example.biocapture.R;
 import com.example.biocapture.RefactorActivity;
 import com.example.biocapture.RegisterActivity;
+import com.example.biocapture.RetrofitClient;
 import com.example.biocapture.VerifyActivity;
 
 import api.ApiService;
@@ -26,9 +27,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends BaseActivity {
 
+    private ApiService apiService;
     private EditText[] pinInputs;
 
     @Override
@@ -159,14 +160,9 @@ public class LoginActivity extends BaseActivity {
         alertDialog.show();
     }
     private void authenticateUser(String pin) {
-        // Create Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.2.38:5223/") // Update with your actual backend URL
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        // Create API service interface
-        ApiService apiService = retrofit.create(ApiService.class);
+        // Initialize apiService
+        Retrofit retrofit = RetrofitClient.getClient();
+        apiService = retrofit.create(ApiService.class);
 
         // Create authentication request body
         UserLoginRequest userLoginRequest = new UserLoginRequest(pin);
@@ -234,14 +230,9 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void authenticateAdmin(String username, String password) {
-        // Create Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.2.38:5223/") // Update with your actual backend URL
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        // Create API service interface
-        ApiService apiService = retrofit.create(ApiService.class);
+        // Initialize apiService
+        Retrofit retrofit = RetrofitClient.getClient();
+        apiService = retrofit.create(ApiService.class);
 
         // Create login request body
         AdminLoginRequest adminLoginRequest = new AdminLoginRequest(username, password);

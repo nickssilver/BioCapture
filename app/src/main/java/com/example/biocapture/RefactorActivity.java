@@ -17,22 +17,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RefactorActivity extends BaseActivity {
 
     private EditText studentAdmn, editDetails;
     private Button buttonDelete;
-
-    private static final String BASE_URL = "http://192.168.0.47:5000";
-
-    private static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
-    private static ApiService apiService = retrofit.create(ApiService.class);
-
+    private ApiService apiService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +31,10 @@ public class RefactorActivity extends BaseActivity {
         studentAdmn = findViewById(R.id.studentAdmn);
         editDetails = findViewById(R.id.editDetails);
         buttonDelete = findViewById(R.id.buttonDelete);
+
+
+        Retrofit retrofit = RetrofitClient.getClient();
+        apiService = retrofit.create(ApiService.class);
 
         studentAdmn.addTextChangedListener(new TextWatcher() {
             @Override

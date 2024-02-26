@@ -69,7 +69,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:text="Add User" />
+                    android:text="Add User"
+                    android:background="@drawable/button_background"
+                    android:textColor="@color/white"/>
             </RelativeLayout>
 
             <TextView

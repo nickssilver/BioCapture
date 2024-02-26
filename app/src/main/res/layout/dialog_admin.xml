@@ -6,71 +6,143 @@ android:orientation="vertical"
 android:padding="16dp">
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User ID"
+        android:textColor="@color/grey"
+        android:textSize="18sp"
+        android:textStyle="normal"/>
+
     <EditText
         android:id="@+id/userid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:textSize="14sp"
         android:hint="@string/userid" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textColor="@color/grey"
+        android:textSize="18sp"
+        android:textStyle="normal"/>
 
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:textSize="14sp"
         android:hint="@string/name" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Department"
+        android:textColor="@color/grey"
+        android:textSize="18sp"
+        android:textStyle="normal"/>
+
     <EditText
         android:id="@+id/department"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:textSize="14sp"
         android:hint="@string/department" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PIN"
+        android:textColor="@color/grey"
+        android:textSize="18sp"
+        android:textStyle="normal"/>
 
     <EditText
         android:id="@+id/pin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
+        android:textSize="14sp"
         android:hint="@string/pin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contact"
+        android:textColor="@color/grey"
+        android:textSize="18sp"
+        android:textStyle="normal"/>
+
     <EditText
         android:id="@+id/contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
+        android:textSize="14sp"
         android:hint="@string/contact" />
 
-    <CheckBox
-        android:id="@+id/registration"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Roles"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+       />
+    <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"/>
+        android:columnCount="3"
+        android:layout_gravity="center_horizontal"
+      >
 
-    <CheckBox
-        android:id="@+id/verifier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Verify"/>
+        <CheckBox
+            android:id="@+id/registration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
-    <CheckBox
-        android:id="@+id/refactor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Refactor"/>
+        <CheckBox
+            android:id="@+id/verifier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verify"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
-    <CheckBox
-        android:id="@+id/analytics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Analytics"/>
+        <CheckBox
+            android:id="@+id/refactor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Refactor"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
-    <CheckBox
-        android:id="@+id/management"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Management"/>
+        <CheckBox
+            android:id="@+id/analytics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Analytics"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
+        <CheckBox
+            android:id="@+id/management"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User Management"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
-
-
+    </GridLayout>
 
 </LinearLayout>

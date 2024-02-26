@@ -63,20 +63,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FpSensorActivity extends BaseActivity {
 
-
+    private ApiService apiService;
     public void getAllTemplatesFromDatabase(final Callback<List<FingerprintTemplate>> callback) {
         new Thread(() -> {
             try {
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.16.71:5223/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                ApiService apiService = retrofit.create(ApiService.class);
+                // Set up the Retrofit instance with the constant base URL
+                Retrofit retrofit = RetrofitClient.getClient();
+                apiService = retrofit.create(ApiService.class);
 
                 Call<List<FingerprintTemplate>> call = apiService.getAllTemplatesFromDatabase();
 

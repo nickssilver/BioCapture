@@ -29,7 +29,7 @@ import retrofit2.Callback;
 import retrofit2.HttpException;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
 
 
 
@@ -78,11 +78,7 @@ public class RegisterActivity extends BaseActivity {
         });
 
         // Set up the Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.16.71:5223/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        Retrofit retrofit = RetrofitClient.getClient();
         apiService = retrofit.create(ApiService.class);
 
         // Add a TextWatcher to the studentIdEditText field

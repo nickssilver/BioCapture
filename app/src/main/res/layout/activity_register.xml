@@ -70,7 +70,7 @@
                 android:layout_marginStart="100dp"
                 android:layout_marginEnd="100dp"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/black"
                 android:textSize="18sp"
                 android:minWidth="48dp"
