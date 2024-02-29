@@ -12,7 +12,6 @@
         android:background="@drawable/back2"
         tools:context=".Administer.AdminActivity">
 
-
         <LinearLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
@@ -25,8 +24,8 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintTop_toTopOf="parent">
+
             <TextView
                 android:id="@+id/Refactor"
                 android:layout_width="wrap_content"
@@ -37,10 +36,7 @@
                 android:textStyle="bold"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:layout_gravity="center"
-                app:layout_constraintTop_toBottomOf="@+id/Registration"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:layout_gravity="center" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -87,17 +83,20 @@
 
             <!-- Table Layout for User Details -->
             <TableLayout
-                android:id="@+id/userDetailsTable"
+                android:id="@+id/userTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-               >
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="2dp"
+                >
 
                 <!-- Table Row for Column Headers -->
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp">
+                    android:layout_marginStart="1dp"
+                   >
 
                     <!-- Column Headers -->
                     <TextView
@@ -105,119 +104,79 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="UserID"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:padding="8dp" />
+                        android:padding="6dp"
+                        android:textAlignment="center"
+                        android:background="@drawable/border"
+                       />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Name"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:padding="8dp" />
+                        android:padding="6dp"
+                        android:textAlignment="center"
+                        android:background="@drawable/border"
+                      />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Department"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:padding="8dp" />
+                        android:padding="6dp"
+                        android:textAlignment="center"
+                        android:background="@drawable/border"
+                        />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Pin No"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:padding="8dp" />
+                        android:padding="6dp"
+                        android:textAlignment="center"
+                        android:background="@drawable/border"
+                       />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Contact"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:padding="8dp" />
+                        android:padding="6dp"
+                        android:textAlignment="center"
+                        android:background="@drawable/border"
+                        />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Action"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:padding="8dp" />
+                        android:padding="6dp"
+                        android:textAlignment="center"
+                        android:background="@drawable/border"/>
                 </TableRow>
 
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="TTI/34/24"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:padding="8dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Joe"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:padding="8dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Administration"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:padding="8dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="8740"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:padding="8dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="+254 720287104"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:padding="8dp" />
-                    <Spinner
-                        android:id="@+id/actionSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-
-                </TableRow>
+                <!-- Dynamic rows will be added here programmatically -->
 
             </TableLayout>
         </LinearLayout>

@@ -51,7 +51,8 @@ public interface ApiService {
     Call<Void> adminLogin(@Body AdminLoginRequest adminLoginRequest);
     @POST("Users/authenticate")
     Call<PermissionsResponse> authenticateUser(@Query("pin") String pin);
-
+    @GET("Users")
+    Call<List<Biousers>> getAllUsersFromDatabase();
 
     @POST("Users/register")
     Call<Biousers> registerUser(@Body Biousers user);
