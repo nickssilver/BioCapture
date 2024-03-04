@@ -17,6 +17,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -56,5 +57,11 @@ public interface ApiService {
 
     @POST("Users/register")
     Call<Biousers> registerUser(@Body Biousers user);
+
+    @DELETE("Users/{id}")
+    Call<Void> deleteUser(@Path("id") String userId);
+
+    @PUT("Users/{id}")
+    Call<Biousers> editUser(@Path("id") String id, @Body Biousers user);
 
 }
