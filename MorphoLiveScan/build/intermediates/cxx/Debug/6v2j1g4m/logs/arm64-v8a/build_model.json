@@ -29,7 +29,6 @@
     "variantName": "debug",
     "isDebuggableEnabled": true,
     "validAbiList": [
-      "armeabi-v7a",
       "arm64-v8a"
     ],
     "buildTargetSet": [],
@@ -139,6 +138,7 @@
         "rootBuildGradleFolder": "C:\\Users\\Software Engineer\\AndroidStudioProjects\\BioCapture - Copy",
         "sdkFolder": "C:\\Users\\Software Engineer\\AppData\\Local\\Android\\Sdk",
         "isBuildOnlyTargetAbiEnabled": true,
+        "ideBuildTargetAbi": "arm64-v8a,armeabi-v7a,armeabi",
         "isCmakeBuildCohabitationEnabled": false,
         "isPrefabEnabled": false
       },

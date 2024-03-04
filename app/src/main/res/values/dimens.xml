@@ -9,6 +9,15 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!-- res/values/dimens.xml -->
+    <dimen name="button_padding">0dp</dimen> <!-- Adjust padding as needed -->
+    <dimen name="button_margin">2dp</dimen>
+    <dimen name="button_width">40dp</dimen>
+    <dimen name="button_height">10dp</dimen>
+
+    <dimen name="button_text_size">8dp</dimen> <!-- Adjust margin as needed -->
+
+
     <!--<dimen name="fp_header_size">30pt</dimen>
     <dimen name="fp_label_size">20pt</dimen>
     <dimen name="fp_label_response_size">18pt</dimen>-->

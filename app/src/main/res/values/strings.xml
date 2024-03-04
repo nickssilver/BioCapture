@@ -38,7 +38,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="username">username</string>
     <string name="password">password</string>
-    <string name="userid">UserID</string>
+    <string name="userid">Username</string>
     <string name="name">Input Name</string>
     <string name="department">Input Department</string>
     <string name="pin">4 digit</string>

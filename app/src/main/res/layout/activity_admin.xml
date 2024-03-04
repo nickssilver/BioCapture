@@ -45,7 +45,7 @@
                 <EditText
                     android:id="@+id/studentAdmn"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="60dp"
@@ -65,7 +65,10 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:text="Add User"
+                    android:text="User"
+                    app:icon="@drawable/baseline_add"
+                    app:iconGravity="textStart"
+                    app:backgroundTint="@null"
                     android:background="@drawable/button_background"
                     android:textColor="@color/white"/>
             </RelativeLayout>

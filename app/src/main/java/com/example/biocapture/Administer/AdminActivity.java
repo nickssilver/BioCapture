@@ -1,11 +1,15 @@
 package com.example.biocapture.Administer;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -68,7 +72,7 @@ public class AdminActivity extends BaseActivity {
                         TableRow tableRow = new TableRow(AdminActivity.this);
                         tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-                        // UserID
+                        // UserName
                         TextView userIdTextView = new TextView(AdminActivity.this);
                         userIdTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
                         userIdTextView.setText(user.getUserId());
@@ -86,11 +90,17 @@ public class AdminActivity extends BaseActivity {
                         department.setText(user.getDepartment());
                         tableRow.addView(department);
 
-                        // Pin No
-                        TextView pin = new TextView(AdminActivity.this);
-                        pin.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-                        pin.setText(user.getPin());
-                        tableRow.addView(pin);
+                        String pin = user.getPin();
+                        // Mask the PIN with asterisks
+                        StringBuilder maskedPin = new StringBuilder();
+                        for (int i = 0; i < pin.length(); i++) {
+                            maskedPin.append("*");
+                        }
+
+                        TextView pinTextView = new TextView(AdminActivity.this);
+                        pinTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+                        pinTextView.setText(maskedPin.toString()); // Display the masked PIN
+                        tableRow.addView(pinTextView);
 
                         // Contact
                         TextView contact = new TextView(AdminActivity.this);
@@ -101,11 +111,36 @@ public class AdminActivity extends BaseActivity {
                         // Create a Button for the action column
                         Button actionButton = new Button(AdminActivity.this);
                         actionButton.setText("Action");
-                        // Set the layout_gravity to center to align the button
+
+                        // Set background color (you can use a drawable resource for more complex backgrounds)
+                        actionButton.setBackgroundResource(R.drawable.action_button_background); // Replace with your drawable resource
+
+                        // Set text color
+                        actionButton.setTextColor(Color.WHITE);
+                        // Set text size
+                        float textSizeInSp = getResources().getDimensionPixelSize(R.dimen.button_text_size); // Replace with your dimension resource
+                        actionButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp);
+
+
+                    // Set padding
+                        int paddingInPx = getResources().getDimensionPixelSize(R.dimen.button_padding);
+                        actionButton.setPadding(paddingInPx, paddingInPx, paddingInPx, paddingInPx);
+                        // Set width and height
+                        int buttonWidthInPx = getResources().getDimensionPixelSize(R.dimen.button_width); // Replace with your dimension resource
+                        int buttonHeightInPx = getResources().getDimensionPixelSize(R.dimen.button_height); // Replace with your dimension resource
+                        actionButton.setLayoutParams(new ViewGroup.LayoutParams(buttonWidthInPx, buttonHeightInPx));
+
+
+
+                    // Set margins
                         TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                        int marginInPx = getResources().getDimensionPixelSize(R.dimen.button_margin);
+                        layoutParams.setMargins(marginInPx, marginInPx, marginInPx, marginInPx);
                         layoutParams.gravity = Gravity.CENTER;
                         actionButton.setLayoutParams(layoutParams);
+
                         tableRow.addView(actionButton);
+
 
                         userTable.addView(tableRow);
 
@@ -167,6 +202,17 @@ public class AdminActivity extends BaseActivity {
         departmentField = dialogLayout.findViewById(R.id.department);
         pinField = dialogLayout.findViewById(R.id.pin);
         contactField = dialogLayout.findViewById(R.id.contact);
+
+        // Set the input type of pinField to textPassword
+        pinField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+
+        // Fetch the PIN from the user object and set it as asterisks in the pinField
+        String userPin = user.getPin();
+        StringBuilder maskedPin = new StringBuilder();
+        for (int i = 0; i < userPin.length(); i++) {
+            maskedPin.append("*");
+        }
+        pinField.setText(maskedPin.toString());
 
         // Initialize CheckBox fields
         CheckBox registration = dialogLayout.findViewById(R.id.registration);

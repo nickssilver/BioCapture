@@ -9,7 +9,7 @@ android:padding="16dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="User ID*"
+        android:text="Username*"
         android:textColor="@color/grey"
         android:textSize="18sp"
         android:textStyle="normal"/>
