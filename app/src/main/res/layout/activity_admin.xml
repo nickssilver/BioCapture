@@ -40,7 +40,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
                 <EditText
                     android:id="@+id/studentAdmn"
@@ -56,22 +57,28 @@
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="center"/>
 
-                <Button
+                <ImageButton
                     android:id="@+id/AdduserButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:text="User"
-                    app:icon="@drawable/baseline_add"
+                    android:text="@string/adduser"
+                    android:textColor="@color/white"
+                    android:background="@drawable/button_background"
+                    android:src="@drawable/ic_plus"
+                    android:drawableStart="@drawable/ic_plus"
                     app:iconGravity="textStart"
                     app:backgroundTint="@null"
-                    android:background="@drawable/button_background"
-                    android:textColor="@color/white"/>
+                    android:layout_gravity="center"/>
+
             </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/StudentDetails"

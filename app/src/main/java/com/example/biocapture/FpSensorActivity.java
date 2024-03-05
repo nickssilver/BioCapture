@@ -228,7 +228,7 @@ public class FpSensorActivity extends BaseActivity {
                         morphoDeviceCapture();
                     }
                 }
-            }, 5000); // Delay of 5 seconds
+            }, 8000); // Delay of 5 seconds
 
             // Update flag to indicate that the second capture is scheduled
             isSecondCaptureScheduled = true;

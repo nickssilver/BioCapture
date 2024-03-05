@@ -47,6 +47,8 @@
     <string name="permission2">Verification</string>
     <string name="permission3">Refactor</string>
     <string name="permission4">"Reports "</string>
+    <string name="adduser">User</string>
+
     <string-array name="action_options">
         <item>Edit</item>
         <item>Delete</item>
