@@ -53,6 +53,7 @@ import com.morpho.morphosmart.sdk.TemplateList;
 import com.morpho.morphosmart.sdk.TemplateType;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -228,7 +229,7 @@ public class FpSensorActivity extends BaseActivity {
                         morphoDeviceCapture();
                     }
                 }
-            }, 8000); // Delay of 5 seconds
+            }, 8000); // Delay of 8 seconds
 
             // Update flag to indicate that the second capture is scheduled
             isSecondCaptureScheduled = true;
@@ -511,9 +512,10 @@ public class FpSensorActivity extends BaseActivity {
         }
 
         Thread commandThread = new Thread(new Runnable() {
+            String match = ""; // Define 'match' variable here
+
             @Override
             public void run() {
-                String match = "";
                 int ret = 0;
                 int timeOut = 30;
                 int far = MORPHO_FAR_5;
@@ -521,19 +523,29 @@ public class FpSensorActivity extends BaseActivity {
                 int detectModeChoice = DetectionMode.MORPHO_ENROLL_DETECT_MODE.getValue()
                         | DetectionMode.MORPHO_FORCE_FINGER_ON_TOP_DETECT_MODE.getValue();
                 int matchingStrategy = MatchingStrategy.MORPHO_STANDARD_MATCHING_STRATEGY.getValue();
+
                 int callbackCmd = CallbackMask.MORPHO_CALLBACK_IMAGE_CMD.getValue()
                         | CallbackMask.MORPHO_CALLBACK_COMMAND_CMD.getValue();
 
+                // Decode Base64 strings into byte arrays outside the loop
+                List<byte[]> fingerprint1List = new ArrayList<>();
+                List<byte[]> fingerprint2List = new ArrayList<>();
+                for (FingerprintTemplate template : templates) {
+                    byte[] fingerprint1 = Base64.getDecoder().decode(template.getFingerprint1());
+                    byte[] fingerprint2 = Base64.getDecoder().decode(template.getFingerprint2());
+                    fingerprint1List.add(fingerprint1);
+                    fingerprint2List.add(fingerprint2);
+                }
+
+                // Define the batch size
                 int batchSize = 10;
+                // Split templates into batches and process them
                 for (int i = 0; i < templates.size(); i += batchSize) {
                     TemplateList templateBatch = new TemplateList();
-                    for (int j = i; j < Math.min(i + batchSize, templates.size()); j++) {
-                        FingerprintTemplate template = templates.get(j);
-                        String fingerprint1Str = template.getFingerprint1();
-                        String fingerprint2Str = template.getFingerprint2();
 
-                        byte[] fingerprint1 = Base64.getDecoder().decode(fingerprint1Str);
-                        byte[] fingerprint2 = Base64.getDecoder().decode(fingerprint2Str);
+                    for (int j = i; j < Math.min(i + batchSize, templates.size()); j++) {
+                        byte[] fingerprint1 = fingerprint1List.get(j);
+                        byte[] fingerprint2 = fingerprint2List.get(j);
 
                         Template morphoTemplate1 = new Template();
                         morphoTemplate1.setData(fingerprint1);
@@ -547,90 +559,99 @@ public class FpSensorActivity extends BaseActivity {
                         templateBatch.putTemplate(morphoTemplate2);
                     }
 
+                    // Reset resultMatching object
                     final ResultMatching resultMatching = new ResultMatching();
                     try {
+                        // Perform the verification process for each batch
                         ret = morphoDevice.verify(timeOut, far, coder, detectModeChoice, matchingStrategy,
                                 templateBatch, callbackCmd, processObserver, resultMatching);
 
+                        Log.d(TAG, "morphoDeviceVerify ret = " + ret);
                         if (ret != ErrorCodes.MORPHO_OK) {
                             handleVerificationError(ret);
                         } else {
-                            handleVerificationSuccess(resultMatching, templates);
+                            if (resultMatching != null) {
+                                match = "Matching score: " + resultMatching.getMatchingScore();
+                                int matchedIndex = resultMatching.getMatchingPKNumber();
+                                FingerprintTemplate matchedTemplate = templates.get(matchedIndex);
+
+                                // Get the matched student's details
+                                String matchedStudentId = matchedTemplate.getStudentId();
+                                String matchedStudentName = matchedTemplate.getStudentName();
+                                double matchedArrears = matchedTemplate.getArrears();
+                                String matchedClassId = matchedTemplate.getClassId();
+                                String matchedStatus = matchedTemplate.getStatus();
+
+                                // Pass the information to the VerifyActivity
+                                Intent intent = new Intent(FpSensorActivity.this, VerifyActivity.class);
+                                intent.putExtra("studentId", matchedStudentId);
+                                intent.putExtra("studentName", matchedStudentName);
+                                intent.putExtra("arrears", matchedArrears);
+                                intent.putExtra("classId", matchedClassId);
+                                intent.putExtra("status", matchedStatus);
+                                startActivity(intent);
+                            }
                         }
                     } catch (Exception e) {
+                        // Handle unexpected exceptions during verification
                         handleVerificationException(e);
                     }
                 }
 
-                handleVerificationCompleted(match);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        verifying = false;
+                        rootView.setKeepScreenOn(false);
+
+                        status_tv.setText(" ");
+                        result_tv.setText(match);
+
+                        verify_bt.setText(R.string.verify);
+                        capture_bt.setVisibility(View.VISIBLE);
+                    }
+                });
             }
         });
 
         commandThread.start();
     }
 
-    private void handleVerificationError(int ret) {
-        String err = "";
-        switch (ret) {
-            case ErrorCodes.MORPHOERR_TIMEOUT:
-                err = "Verify process failed: timeout";
-                break;
-            case ErrorCodes.MORPHOERR_CMDE_ABORTED:
-                err = "Verify process aborted";
-                break;
-            case ErrorCodes.MORPHOERR_UNAVAILABLE:
-                err = "Device is not available";
-                break;
-            case ErrorCodes.MORPHOERR_INVALID_FINGER:
-            case ErrorCodes.MORPHOERR_NO_HIT:
-                err = "Authentication or Identification failed";
-                break;
-            default:
-                err = "Error code is " + ret;
-                break;
-        }
-        showToastMessage(err, Toast.LENGTH_SHORT);
-    }
-
-    private void handleVerificationSuccess(ResultMatching resultMatching, List<FingerprintTemplate> templates) {
-        String match = "";
-        if (resultMatching != null) {
-            match = "Matching score: " + resultMatching.getMatchingScore();
-            int matchedIndex = resultMatching.getMatchingPKNumber();
-            FingerprintTemplate matchedTemplate = templates.get(matchedIndex);
-
-            String matchedStudentId = matchedTemplate.getStudentId();
-            String matchedStudentName = matchedTemplate.getStudentName();
-            double matchedArrears = matchedTemplate.getArrears();
-            String matchedClassId = matchedTemplate.getClassId();
-            String matchedStatus = matchedTemplate.getStatus();
-
-            Intent intent = new Intent(FpSensorActivity.this, VerifyActivity.class);
-            intent.putExtra("studentId", matchedStudentId);
-            intent.putExtra("studentName", matchedStudentName);
-            intent.putExtra("arrears", matchedArrears);
-            intent.putExtra("classId", matchedClassId);
-            intent.putExtra("status", matchedStatus);
-            startActivity(intent);
-        }
-    }
-
+    // Define method to handle verification exceptions
     private void handleVerificationException(Exception e) {
         e.printStackTrace();
-        String exceptionMsg = "Exception during verification: " + e.getMessage();
-        showToastMessage(exceptionMsg, Toast.LENGTH_SHORT);
+        final String exceptionMsg = "Exception during verification: " + e.getMessage();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showToastMessage(exceptionMsg, Toast.LENGTH_SHORT);
+            }
+        });
     }
 
-    private void handleVerificationCompleted(String match) {
-        verifying = false;
-        rootView.setKeepScreenOn(false);
-        status_tv.setText(" ");
-        result_tv.setText(match);
-        verify_bt.setText(R.string.verify);
-        capture_bt.setVisibility(View.VISIBLE);
+    // Define method to handle verification errors
+    private void handleVerificationError(int errorCode) {
+        String err = "";
+        if (errorCode == ErrorCodes.MORPHOERR_TIMEOUT) {
+            err = "Verify process failed: timeout";
+        } else if (errorCode == ErrorCodes.MORPHOERR_CMDE_ABORTED) {
+            err = "Verify process aborted";
+        } else if (errorCode == ErrorCodes.MORPHOERR_UNAVAILABLE) {
+            err = "Device is not available";
+        } else if (errorCode == ErrorCodes.MORPHOERR_INVALID_FINGER || errorCode == ErrorCodes.MORPHOERR_NO_HIT) {
+            err = "Authentication or Identification failed";
+            //match = "Fingerprint doesn't match"; // No need to set 'match' here
+        } else {
+            err = "Error code is " + errorCode;
+        }
+        final String finalErr = err;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showToastMessage(finalErr, Toast.LENGTH_SHORT);
+            }
+        });
     }
-
-
     @Override
     protected void onPause() {
         super.onPause();
