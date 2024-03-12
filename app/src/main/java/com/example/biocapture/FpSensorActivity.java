@@ -125,8 +125,6 @@ public class FpSensorActivity extends BaseActivity {
     public interface FingerprintDataReadyCallback {
         void onFingerprintDataReady(byte[] fingerprintData);
     }
-    private FingerprintDataReadyCallback callback;
-
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
