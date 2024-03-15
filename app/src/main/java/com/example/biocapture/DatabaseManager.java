@@ -4,8 +4,10 @@ import com.morpho.morphosmart.sdk.CustomInteger;
 import com.morpho.morphosmart.sdk.MorphoDatabase;
 import com.morpho.morphosmart.sdk.MorphoField;
 import com.morpho.morphosmart.sdk.MorphoSmartException;
+import com.morpho.morphosmart.sdk.MorphoUser;
 import com.morpho.morphosmart.sdk.TemplateType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import api.ApiService;
@@ -129,5 +131,24 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
+    // Method to query data from internal database
+    public List<MorphoUser> queryDataFromInternalDB(MorphoDatabase internalDatabase, int fieldIndex, String searchDataToFind) {
+        List<MorphoUser> users = new ArrayList<>();
+        try {
+            MorphoUser user = new MorphoUser();
+            internalDatabase.dbQueryFirst(fieldIndex, searchDataToFind, user);
+
+            while (user != null) {
+                users.add(user);
+                user = new MorphoUser();
+                internalDatabase.dbQueryNext(user);
+            }
+        } catch (MorphoSmartException e) {
+            // Handle MorphoSmartException
+            e.printStackTrace();
+        }
+        return users;
+    }
+
 
 }

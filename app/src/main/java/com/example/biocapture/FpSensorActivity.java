@@ -45,7 +45,9 @@ import com.morpho.morphosmart.sdk.EnrollmentType;
 import com.morpho.morphosmart.sdk.ErrorCodes;
 import com.morpho.morphosmart.sdk.LatentDetection;
 import com.morpho.morphosmart.sdk.MatchingStrategy;
+import com.morpho.morphosmart.sdk.MorphoDatabase;
 import com.morpho.morphosmart.sdk.MorphoDevice;
+import com.morpho.morphosmart.sdk.MorphoUser;
 import com.morpho.morphosmart.sdk.ResultMatching;
 import com.morpho.morphosmart.sdk.Template;
 import com.morpho.morphosmart.sdk.TemplateFVPType;
@@ -62,36 +64,36 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
+import com.example.biocapture.DatabaseManager;
 public class FpSensorActivity extends BaseActivity {
 
     private ApiService apiService;
-    public void getAllTemplatesFromDatabase(final Callback<List<FingerprintTemplate>> callback) {
-        new Thread(() -> {
-            try {
-                // Set up the Retrofit instance with the constant base URL
-                Retrofit retrofit = RetrofitClient.getClient();
-                apiService = retrofit.create(ApiService.class);
-
-                Call<List<FingerprintTemplate>> call = apiService.getAllTemplatesFromDatabase();
-
-                Response<List<FingerprintTemplate>> response = call.execute();
-                if (response.isSuccessful()) {
-                    callback.onResponse(call, response);
-                } else {
-                    Log.e(TAG, "Failed to retrieve templates from the database. Response code: " + response.code());
-                    runOnUiThread(() -> callback.onFailure(call, new IOException("Failed to retrieve templates from the database1")));
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "Failed to retrieve templates from the database. Exception: ", e);
-                runOnUiThread(() -> callback.onFailure(null, new IOException("Failed to retrieve templates from the database2", e)));
-            } catch (Exception e) {
-                Log.e(TAG, "Unexpected error", e);
-                runOnUiThread(() -> callback.onFailure(null, new RuntimeException("Unexpected error", e)));
-            }
-
-        }).start();
-    }
+//    public void getAllTemplatesFromDatabase(final Callback<List<FingerprintTemplate>> callback) {
+//        new Thread(() -> {
+//            try {
+//                // Set up the Retrofit instance with the constant base URL
+//                Retrofit retrofit = RetrofitClient.getClient();
+//                apiService = retrofit.create(ApiService.class);
+//
+//                Call<List<FingerprintTemplate>> call = apiService.getAllTemplatesFromDatabase();
+//
+//                Response<List<FingerprintTemplate>> response = call.execute();
+//                if (response.isSuccessful()) {
+//                    callback.onResponse(call, response);
+//                } else {
+//                    Log.e(TAG, "Failed to retrieve templates from the database. Response code: " + response.code());
+//                    runOnUiThread(() -> callback.onFailure(call, new IOException("Failed to retrieve templates from the database1")));
+//                }
+//            } catch (IOException e) {
+//                Log.e(TAG, "Failed to retrieve templates from the database. Exception: ", e);
+//                runOnUiThread(() -> callback.onFailure(null, new IOException("Failed to retrieve templates from the database2", e)));
+//            } catch (Exception e) {
+//                Log.e(TAG, "Unexpected error", e);
+//                runOnUiThread(() -> callback.onFailure(null, new RuntimeException("Unexpected error", e)));
+//            }
+//
+//        }).start();
+//    }
     public static final String EXTRA_FINGERPRINTS = "extra_fingerprints";
     private void returnFingerprintData(byte[][] fingerprints) {
         Intent resultIntent = new Intent();
@@ -261,7 +263,6 @@ public class FpSensorActivity extends BaseActivity {
         if (!verifying) {
             result_tv.setText(" ");
             verifying = true;
-
             rootView.setKeepScreenOn(true);
 
             // Start the verification process
@@ -272,10 +273,14 @@ public class FpSensorActivity extends BaseActivity {
                     public void onResponse(Call<List<FingerprintTemplate>> call, Response<List<FingerprintTemplate>> response) {
                         List<FingerprintTemplate> templates = response.body();
                         if (templates != null) {
-                            morphoDeviceVerify(templates);
+                            // Get all users from the internal database
+                            MorphoDatabase internalDatabase = new MorphoDatabase();
+                            List<MorphoUser> users = queryDataFromInternalDB(internalDatabase);
+
+                            morphoDeviceVerify(templates, users);
                         } else {
                             // Handle the case where the response body is null
-                            showToastMessage("Failed to retrieve templates from the database.Empty response.", Toast.LENGTH_SHORT);
+                            showToastMessage("Failed to retrieve templates from the database. Empty response.", Toast.LENGTH_SHORT);
                             verifying = false;
                             rootView.setKeepScreenOn(false);
                         }
@@ -284,7 +289,7 @@ public class FpSensorActivity extends BaseActivity {
                     @Override
                     public void onFailure(Call<List<FingerprintTemplate>> call, Throwable t) {
                         // Handle the failure case
-                        showToastMessage("Failed to retrieve templates from the database3: Error" + t.getMessage(), Toast.LENGTH_SHORT);
+                        showToastMessage("Failed to retrieve templates from the database: Error" + t.getMessage(), Toast.LENGTH_SHORT);
                         verifying = false;
                         rootView.setKeepScreenOn(false);
                     }
@@ -298,10 +303,8 @@ public class FpSensorActivity extends BaseActivity {
             morphoDevice = closeMorphoDevice(morphoDevice);
             verify_bt.setText(R.string.verify);
             capture_bt.setVisibility(View.VISIBLE);
-
             verifying = false;
             deviceIsSet = false;
-
             rootView.setKeepScreenOn(false);
         }
     }
@@ -527,75 +530,83 @@ public class FpSensorActivity extends BaseActivity {
                 int callbackCmd = CallbackMask.MORPHO_CALLBACK_IMAGE_CMD.getValue()
                         | CallbackMask.MORPHO_CALLBACK_COMMAND_CMD.getValue();
 
-                // Decode Base64 strings into byte arrays outside the loop
-                List<byte[]> fingerprint1List = new ArrayList<>();
-                List<byte[]> fingerprint2List = new ArrayList<>();
+                // Instantiate MorphoDatabase to access internal database
+                MorphoDatabase internalDatabase = new MorphoDatabase();
+
+                // Get all users from the internal database
+                List<MorphoUser> users = queryDataFromInternalDB(internalDatabase);
+
+                TemplateList templateList = new TemplateList();
+
                 for (FingerprintTemplate template : templates) {
                     byte[] fingerprint1 = Base64.getDecoder().decode(template.getFingerprint1());
                     byte[] fingerprint2 = Base64.getDecoder().decode(template.getFingerprint2());
-                    fingerprint1List.add(fingerprint1);
-                    fingerprint2List.add(fingerprint2);
+
+                    Template morphoTemplate1 = new Template();
+                    morphoTemplate1.setData(fingerprint1);
+                    morphoTemplate1.setTemplateType(TemplateType.MORPHO_PK_ISO_FMR);
+
+                    Template morphoTemplate2 = new Template();
+                    morphoTemplate2.setData(fingerprint2);
+                    morphoTemplate2.setTemplateType(TemplateType.MORPHO_PK_ISO_FMR);
+
+                    templateList.putTemplate(morphoTemplate1);
+                    templateList.putTemplate(morphoTemplate2);
                 }
 
-                // Define the batch size
-                int batchSize = 10;
-                // Split templates into batches and process them
-                for (int i = 0; i < templates.size(); i += batchSize) {
-                    TemplateList templateBatch = new TemplateList();
+                // Reset resultMatching object
+                final ResultMatching resultMatching = new ResultMatching();
+                try {
+                    // Perform the verification process
+                    ret = morphoDevice.verify(timeOut, far, coder, detectModeChoice, matchingStrategy,
+                            templateList, callbackCmd, processObserver, resultMatching);
 
-                    for (int j = i; j < Math.min(i + batchSize, templates.size()); j++) {
-                        byte[] fingerprint1 = fingerprint1List.get(j);
-                        byte[] fingerprint2 = fingerprint2List.get(j);
+                    Log.d(TAG, "morphoDeviceVerify ret = " + ret);
+                    if (ret != ErrorCodes.MORPHO_OK) {
+                        handleVerificationError(ret);
+                    } else {
+                        if (resultMatching != null) {
+                            match = "Matching score: " + resultMatching.getMatchingScore();
 
-                        Template morphoTemplate1 = new Template();
-                        morphoTemplate1.setData(fingerprint1);
-                        morphoTemplate1.setTemplateType(TemplateType.MORPHO_PK_ISO_FMR);
+                            // Get the matched user's fingerprints from the internal database
+                            for (MorphoUser user : users) {
+                                byte[] storedFingerprint1 = user.getFingerprint1();
+                                byte[] storedFingerprint2 = user.getFingerprint2();
 
-                        Template morphoTemplate2 = new Template();
-                        morphoTemplate2.setData(fingerprint2);
-                        morphoTemplate2.setTemplateType(TemplateType.MORPHO_PK_ISO_FMR);
+                                Template morphoTemplate1 = new Template();
+                                morphoTemplate1.setData(storedFingerprint1);
+                                morphoTemplate1.setTemplateType(TemplateType.MORPHO_PK_ISO_FMR);
 
-                        templateBatch.putTemplate(morphoTemplate1);
-                        templateBatch.putTemplate(morphoTemplate2);
-                    }
+                                Template morphoTemplate2 = new Template();
+                                morphoTemplate2.setData(storedFingerprint2);
+                                morphoTemplate2.setTemplateType(TemplateType.MORPHO_PK_ISO_FMR);
 
-                    // Reset resultMatching object
-                    final ResultMatching resultMatching = new ResultMatching();
-                    try {
-                        // Perform the verification process for each batch
-                        ret = morphoDevice.verify(timeOut, far, coder, detectModeChoice, matchingStrategy,
-                                templateBatch, callbackCmd, processObserver, resultMatching);
+                                TemplateList storedTemplateList = new TemplateList();
+                                storedTemplateList.putTemplate(morphoTemplate1);
+                                storedTemplateList.putTemplate(morphoTemplate2);
 
-                        Log.d(TAG, "morphoDeviceVerify ret = " + ret);
-                        if (ret != ErrorCodes.MORPHO_OK) {
-                            handleVerificationError(ret);
-                        } else {
-                            if (resultMatching != null) {
-                                match = "Matching score: " + resultMatching.getMatchingScore();
-                                int matchedIndex = resultMatching.getMatchingPKNumber();
-                                FingerprintTemplate matchedTemplate = templates.get(matchedIndex);
+                                // Perform verification with fingerprints from internal database
+                                ret = morphoDevice.verify(timeOut, far, coder, detectModeChoice, matchingStrategy,
+                                        storedTemplateList, callbackCmd, processObserver, resultMatching);
 
-                                // Get the matched student's details
-                                String matchedStudentId = matchedTemplate.getStudentId();
-                                String matchedStudentName = matchedTemplate.getStudentName();
-                                double matchedArrears = matchedTemplate.getArrears();
-                                String matchedClassId = matchedTemplate.getClassId();
-                                String matchedStatus = matchedTemplate.getStatus();
-
-                                // Pass the information to the VerifyActivity
-                                Intent intent = new Intent(FpSensorActivity.this, VerifyActivity.class);
-                                intent.putExtra("studentId", matchedStudentId);
-                                intent.putExtra("studentName", matchedStudentName);
-                                intent.putExtra("arrears", matchedArrears);
-                                intent.putExtra("classId", matchedClassId);
-                                intent.putExtra("status", matchedStatus);
-                                startActivity(intent);
+                                if (ret == ErrorCodes.MORPHO_OK) {
+                                    // Verification successful, handle accordingly
+                                    // Pass the information to the VerifyActivity
+                                    Intent intent = new Intent(FpSensorActivity.this, VerifyActivity.class);
+                                    intent.putExtra("studentId", user.getStudentId());
+                                    intent.putExtra("studentName", user.getStudentName());
+                                    intent.putExtra("arrears", user.getArrears());
+                                    intent.putExtra("classId", user.getClassId());
+                                    intent.putExtra("status", user.getStatus());
+                                    startActivity(intent);
+                                    break; // Exit the loop after finding a match
+                                }
                             }
                         }
-                    } catch (Exception e) {
-                        // Handle unexpected exceptions during verification
-                        handleVerificationException(e);
                     }
+                } catch (Exception e) {
+                    // Handle unexpected exceptions during verification
+                    handleVerificationException(e);
                 }
 
                 runOnUiThread(new Runnable() {
@@ -616,19 +627,6 @@ public class FpSensorActivity extends BaseActivity {
 
         commandThread.start();
     }
-
-    // Define method to handle verification exceptions
-    private void handleVerificationException(Exception e) {
-        e.printStackTrace();
-        final String exceptionMsg = "Exception during verification: " + e.getMessage();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showToastMessage(exceptionMsg, Toast.LENGTH_SHORT);
-            }
-        });
-    }
-
     // Define method to handle verification errors
     private void handleVerificationError(int errorCode) {
         String err = "";
