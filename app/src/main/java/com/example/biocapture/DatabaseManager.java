@@ -25,13 +25,67 @@ public class DatabaseManager {
     }
 
     // Create Internal Database
-    public void createInternalDatabase(MorphoDatabase morphoDatabase, int maxRecords, int maxFingersPerRecord, int maxFieldSize) {
+    public MorphoDatabase createInternalDatabase(int maxRecords, int maxFingersPerRecord, int maxFieldSize) throws MorphoSmartException {
+        // Create MorphoDatabase object
+        MorphoDatabase morphoDatabase = new MorphoDatabase();
+
+        // Database creation
+        int result = morphoDatabase.dbCreate(maxRecords, maxFingersPerRecord, TemplateType.getValue(maxFieldSize), 0, false);
+        if (result != 0) {
+            throw new MorphoSmartException("Error creating internal database. Error code: " + result);
+        }
+
+        // Define fields according to the table columns
+        defineFields(morphoDatabase);
+
+        return morphoDatabase;
+    }
+
+    // Define fields in the internal database based on table columns
+    private void defineFields(MorphoDatabase morphoDatabase) {
         try {
-            // Database creation
-            int result = morphoDatabase.dbCreate(maxRecords, maxFingersPerRecord, TemplateType.getValue(maxFieldSize), 0, false);
-            if (result != 0) {
-                throw new MorphoSmartException("Error creating internal database. Error code: " + result);
-            }
+            // Define field for StudentId
+            MorphoField studentIdField = new MorphoField();
+            studentIdField.setName("StudentId");
+            studentIdField.setMaxSize(50);
+            morphoDatabase.putField(studentIdField, new CustomInteger());
+
+            // Define field for StudentName
+            MorphoField studentNameField = new MorphoField();
+            studentNameField.setName("StudentName");
+            studentNameField.setMaxSize(255);
+            morphoDatabase.putField(studentNameField, new CustomInteger());
+
+            // Define field for ClassId
+            MorphoField classIdField = new MorphoField();
+            classIdField.setName("ClassId");
+            classIdField.setMaxSize(255);
+            morphoDatabase.putField(classIdField, new CustomInteger());
+
+            // Define field for Status
+            MorphoField statusField = new MorphoField();
+            statusField.setName("Status");
+            statusField.setMaxSize(255);
+            morphoDatabase.putField(statusField, new CustomInteger());
+
+            // Define field for Arrears
+            MorphoField arrearsField = new MorphoField();
+            arrearsField.setName("Arrears");
+            arrearsField.setMaxSize(20);
+            morphoDatabase.putField(arrearsField, new CustomInteger());
+
+            // Define field for Fingerprint1
+            MorphoField fingerprint1Field = new MorphoField();
+            fingerprint1Field.setName("Fingerprint1");
+            fingerprint1Field.setMaxSize(1000);
+            morphoDatabase.putField(fingerprint1Field, new CustomInteger());
+
+            // Define field for Fingerprint2
+            MorphoField fingerprint2Field = new MorphoField();
+            fingerprint2Field.setName("Fingerprint2");
+            fingerprint2Field.setMaxSize(1000);
+            morphoDatabase.putField(fingerprint2Field, new CustomInteger());
+
         } catch (MorphoSmartException e) {
             e.printStackTrace();
         }
@@ -64,84 +118,75 @@ public class DatabaseManager {
     // Method to add a single record to the database
     public void addRecordToDatabase(MorphoDatabase morphoDatabase, FingerprintTemplate fingerprintTemplate) {
         try {
-            // Creating MorphoField objects for storing fingerprint data
+            // Creating MorphoField objects for each field
             MorphoField studentIdField = new MorphoField();
-            studentIdField.setName("student_id"); // Set field name
-            studentIdField.setMaxSize(50); // Set maximum size
-            // Set data for student ID field if available
-            if (fingerprintTemplate.getStudentId() != null) {
-                morphoDatabase.putField(studentIdField, new CustomInteger());
-            }
+            studentIdField.setName("StudentId");
+            studentIdField.setMaxSize(50);
+            CustomInteger studentIdValue = new CustomInteger();
+            studentIdValue.setValueOf(Integer.parseInt(fingerprintTemplate.getStudentId()));
+            morphoDatabase.putField(studentIdField, studentIdValue);
 
             MorphoField studentNameField = new MorphoField();
-            studentNameField.setName("student_name");
-            studentNameField.setMaxSize(100);
-            if (fingerprintTemplate.getStudentName() != null) {
-                morphoDatabase.putField(studentNameField,new CustomInteger());
-            }
+            studentNameField.setName("StudentName");
+            studentNameField.setMaxSize(255);
+            CustomInteger studentNameValue = new CustomInteger();
+            studentNameValue.setValueOf(Integer.parseInt(fingerprintTemplate.getStudentName()));
+            morphoDatabase.putField(studentNameField, studentNameValue);
 
             MorphoField classIdField = new MorphoField();
-            classIdField.setName("class_id");
-            classIdField.setMaxSize(20);
-            if (fingerprintTemplate.getClassId() != null) {
-                morphoDatabase.putField(classIdField, new CustomInteger());
-            }
+            classIdField.setName("ClassId");
+            classIdField.setMaxSize(255);
+            CustomInteger classIdValue = new CustomInteger();
+            classIdValue.setValueOf(Integer.parseInt(fingerprintTemplate.getClassId()));
+            morphoDatabase.putField(classIdField, classIdValue);
 
             MorphoField statusField = new MorphoField();
-            statusField.setName("status");
-            statusField.setMaxSize(20);
-            if (fingerprintTemplate.getStatus() != null) {
-                morphoDatabase.putField(statusField, new CustomInteger());
-            }
+            statusField.setName("Status");
+            statusField.setMaxSize(255);
+            CustomInteger statusValue = new CustomInteger();
+            statusValue.setValueOf(Integer.parseInt(fingerprintTemplate.getStatus()));
+            morphoDatabase.putField(statusField, statusValue);
 
             MorphoField arrearsField = new MorphoField();
-            arrearsField.setName("arrears");
+            arrearsField.setName("Arrears");
             arrearsField.setMaxSize(20);
-            // Assuming arrears is stored as a double
-            if (!Double.isNaN(fingerprintTemplate.getArrears())) {
-                morphoDatabase.putField(arrearsField, new CustomInteger());
-            }
-
+            CustomInteger arrearsValue = new CustomInteger();
+            arrearsValue.setValueOf((int) fingerprintTemplate.getArrears()); // Assuming arrears is an integer
+            morphoDatabase.putField(arrearsField, arrearsValue);
 
             MorphoField fingerprint1Field = new MorphoField();
-            fingerprint1Field.setName("fingerprint_1");
+            fingerprint1Field.setName("Fingerprint1");
             fingerprint1Field.setMaxSize(1000);
-            if (fingerprintTemplate.getFingerprint1() != null) {
-                morphoDatabase.putField(fingerprint1Field, new CustomInteger());
-            }
+            CustomInteger fingerprint1Value = new CustomInteger();
+            fingerprint1Value.setValueOf(Integer.parseInt(fingerprintTemplate.getFingerprint1()));
+            morphoDatabase.putField(fingerprint1Field, fingerprint1Value);
 
             MorphoField fingerprint2Field = new MorphoField();
-            fingerprint2Field.setName("fingerprint_2");
+            fingerprint2Field.setName("Fingerprint2");
             fingerprint2Field.setMaxSize(1000);
-            if (fingerprintTemplate.getFingerprint2() != null) {
-                morphoDatabase.putField(fingerprint2Field, new CustomInteger());
-            }
-
-            // Adding fields to the database
-            morphoDatabase.putField(studentIdField, null);
-            morphoDatabase.putField(studentNameField, null);
-            morphoDatabase.putField(classIdField, null);
-            morphoDatabase.putField(statusField, null);
-            morphoDatabase.putField(arrearsField, null);
-            morphoDatabase.putField(fingerprint1Field, null);
-            morphoDatabase.putField(fingerprint2Field, null);
+            CustomInteger fingerprint2Value = new CustomInteger();
+            fingerprint2Value.setValueOf(Integer.parseInt(fingerprintTemplate.getFingerprint2()));
+            morphoDatabase.putField(fingerprint2Field, fingerprint2Value);
 
 
         } catch (MorphoSmartException e) {
             e.printStackTrace();
+        } catch (NumberFormatException e) {
+            // Handle parsing errors
+            e.printStackTrace();
         }
     }
+
     // Method to query data from internal database
-    public List<MorphoUser> queryDataFromInternalDB(MorphoDatabase internalDatabase, int fieldIndex, String searchDataToFind) {
+    public List<MorphoUser> queryDataFromInternalDB(MorphoDatabase internalDatabase) {
         List<MorphoUser> users = new ArrayList<>();
         try {
             MorphoUser user = new MorphoUser();
-            internalDatabase.dbQueryFirst(fieldIndex, searchDataToFind, user);
-
-            while (user != null) {
+            int result = internalDatabase.dbQueryFirst(user);
+            while (result == 0) { // 0 indicates success in dbQueryFirst
                 users.add(user);
                 user = new MorphoUser();
-                internalDatabase.dbQueryNext(user);
+                result = internalDatabase.dbQueryNext(user);
             }
         } catch (MorphoSmartException e) {
             // Handle MorphoSmartException
@@ -149,6 +194,7 @@ public class DatabaseManager {
         }
         return users;
     }
+
 
 
 }
