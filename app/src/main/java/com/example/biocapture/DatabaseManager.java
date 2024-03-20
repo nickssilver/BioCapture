@@ -177,13 +177,16 @@ public class DatabaseManager {
         }
     }
 
-    // Method to query data from internal database
     public List<MorphoUser> queryDataFromInternalDB(MorphoDatabase internalDatabase) {
         List<MorphoUser> users = new ArrayList<>();
         try {
             MorphoUser user = new MorphoUser();
-            int result = internalDatabase.dbQueryFirst(user);
-            while (result == 0) { // 0 indicates success in dbQueryFirst
+
+            // Assuming you want to retrieve all users from the database
+            int result = internalDatabase.dbQueryFirst(-1, "", user);
+
+            while (result == 0) {
+                // 0 indicates success in dbQueryFirst
                 users.add(user);
                 user = new MorphoUser();
                 result = internalDatabase.dbQueryNext(user);
@@ -194,7 +197,6 @@ public class DatabaseManager {
         }
         return users;
     }
-
 
 
 }
