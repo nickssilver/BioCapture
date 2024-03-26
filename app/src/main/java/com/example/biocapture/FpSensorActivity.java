@@ -45,8 +45,8 @@ import com.morpho.morphosmart.sdk.EnrollmentType;
 import com.morpho.morphosmart.sdk.ErrorCodes;
 import com.morpho.morphosmart.sdk.LatentDetection;
 import com.morpho.morphosmart.sdk.MatchingStrategy;
+import com.morpho.morphosmart.sdk.MorphoDatabase;
 import com.morpho.morphosmart.sdk.MorphoDevice;
-import com.morpho.morphosmart.sdk.MorphoUser;
 import com.morpho.morphosmart.sdk.ResultMatching;
 import com.morpho.morphosmart.sdk.Template;
 import com.morpho.morphosmart.sdk.TemplateFVPType;
@@ -462,24 +462,25 @@ public class FpSensorActivity extends BaseActivity {
                 int timeOut = 30;
                 int far = MORPHO_FAR_5;
                 Coder coder = MORPHO_MSO_V9_CODER;
-                int detectModeChoice = DetectionMode.MORPHO_ENROLL_DETECT_MODE.getValue()
-                        | DetectionMode.MORPHO_FORCE_FINGER_ON_TOP_DETECT_MODE.getValue();
+                int detectModeChoice = DetectionMode.MORPHO_ENROLL_DETECT_MODE.getValue() | DetectionMode.MORPHO_FORCE_FINGER_ON_TOP_DETECT_MODE.getValue();
                 int matchingStrategy = MatchingStrategy.MORPHO_STANDARD_MATCHING_STRATEGY.getValue();
 
-                int callbackCmd = CallbackMask.MORPHO_CALLBACK_IMAGE_CMD.getValue()
-                        | CallbackMask.MORPHO_CALLBACK_COMMAND_CMD.getValue();
+                int callbackCmd = CallbackMask.MORPHO_CALLBACK_IMAGE_CMD.getValue() | CallbackMask.MORPHO_CALLBACK_COMMAND_CMD.getValue();
 
                 try {
+                    // obtain MorphoDatabase instance
+                    // Obtain a reference to the existing MorphoDatabase instance
+                    MorphoDatabase morphoDatabase = databaseManager.obtainExistingMorphoDatabase();
                     // Use existing DatabaseManager instance to fetch templates from internal database
-                    List<MorphoUser> users = databaseManager.queryDataFromInternalDB();
+                    List<CustomMorphoUser> users = databaseManager.queryDataFromInternalDB(morphoDatabase);
 
                     // Convert MorphoUser objects to FingerprintTemplate objects
                     List<FingerprintTemplate> templates = new ArrayList<>();
-                    for (MorphoUser user : users) {
+                    for (CustomMorphoUser user : users) {
                         FingerprintTemplate template = new FingerprintTemplate();
                         template.setStudentId(user.getStudentId());
                         template.setStudentName(user.getStudentName());
-                        template.setClassId(user.getClass());
+                        template.setClassId(user.getClassId());
                         template.setStatus(user.getStatus());
                         template.setArrears(user.getArrears());
                         template.setFingerprint1(Base64.getEncoder().encodeToString(user.getFingerprint1()));
@@ -509,8 +510,7 @@ public class FpSensorActivity extends BaseActivity {
                     final ResultMatching resultMatching = new ResultMatching();
                     try {
                         // Perform the verification process
-                        ret = morphoDevice.verify(timeOut, far, coder, detectModeChoice, matchingStrategy,
-                                templateList, callbackCmd, processObserver, resultMatching);
+                        ret = morphoDevice.verify(timeOut, far, coder, detectModeChoice, matchingStrategy, templateList, callbackCmd, processObserver, resultMatching);
 
                         Log.d(TAG, "morphoDeviceVerify ret = " + ret);
                         if (ret != ErrorCodes.MORPHO_OK) {
@@ -540,31 +540,29 @@ public class FpSensorActivity extends BaseActivity {
                         }
                     } catch (Exception e) {
                         // Handle unexpected exceptions during verification
-                        handleVerificationError(e);
+                        handleVerificationError(-1);
                     }
-                } catch (Exception e) {
-                    // Handle exceptions
-                    handleVerificationError(e);
+                } finally {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            verifying = false;
+                            rootView.setKeepScreenOn(false);
+
+                            status_tv.setText(" ");
+                            result_tv.setText(match);
+
+                            verify_bt.setText(R.string.verify);
+                            capture_bt.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        verifying = false;
-                        rootView.setKeepScreenOn(false);
-
-                        status_tv.setText(" ");
-                        result_tv.setText(match);
-
-                        verify_bt.setText(R.string.verify);
-                        capture_bt.setVisibility(View.VISIBLE);
-                    }
-                });
             }
         });
 
         commandThread.start();
     }
+
     // Define method to handle verification errors
     private void handleVerificationError(int errorCode) {
         String err = "";

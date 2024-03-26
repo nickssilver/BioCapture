@@ -1,6 +1,5 @@
 package com.example.biocapture;
 
-
 import android.os.Environment;
 import android.util.Log;
 
@@ -23,6 +22,7 @@ import retrofit2.Response;
 public class DatabaseManager {
 
     private static final String TAG = "DatabaseManager";
+    private static MorphoDatabase existingMorphoDatabaseInstance = null;
 
     // Retrofit API service instance
     private ApiService apiService;
@@ -31,8 +31,29 @@ public class DatabaseManager {
         this.apiService = apiService;
     }
 
+    // Method to obtain an existing MorphoDatabase instance
+    public MorphoDatabase obtainExistingMorphoDatabase() throws MorphoSmartException {
+        if (existingMorphoDatabaseInstance == null) {
+            throw new MorphoSmartException("Existing MorphoDatabase instance is null or not available.");
+        }
+        return existingMorphoDatabaseInstance;
+    }
+
+    // Method to create or obtain the MorphoDatabase instance
+    public MorphoDatabase createOrObtainMorphoDatabase() throws MorphoSmartException {
+        if (existingMorphoDatabaseInstance == null) {
+            existingMorphoDatabaseInstance = createInternalDatabase();
+        }
+        return existingMorphoDatabaseInstance;
+    }
+
     // Create Internal Database
-    public MorphoDatabase createInternalDatabase(int maxRecords, int maxFingersPerRecord, int maxFieldSize) throws MorphoSmartException {
+    public MorphoDatabase createInternalDatabase() throws MorphoSmartException {
+        // Define the maximum number of records, fingers per record, and field size based on your requirements
+        int maxRecords = 100; // Example value
+        int maxFingersPerRecord = 2; // Example value
+        int maxFieldSize = 1000; // Example value
+
         // Create MorphoDatabase object
         MorphoDatabase morphoDatabase = new MorphoDatabase();
 
@@ -56,7 +77,7 @@ public class DatabaseManager {
         // Use the MorphoSmart SDK to get the database path
         // or use the Android file system APIs to determine the path
         // based on the application's internal storage directory
-        File databaseFile = new File(Environment.getDataDirectory(), "data/your.package.name/databases/morpho.db");
+        File databaseFile = new File(Environment.getDataDirectory(), "data/biocapture/databases/morpho.db");
         return databaseFile.getAbsolutePath();
     }
 
@@ -195,20 +216,21 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-
-    public List<MorphoUser> queryDataFromInternalDB(MorphoDatabase internalDatabase) {
-        List<MorphoUser> users = new ArrayList<>();
+    public List<CustomMorphoUser> queryDataFromInternalDB(MorphoDatabase internalDatabase) {
+        List<CustomMorphoUser> users = new ArrayList<>();
         try {
-            MorphoUser user = new MorphoUser();
+            MorphoUser morphoUser = new MorphoUser(); // Create a MorphoUser object
 
             // Assuming you want to retrieve all users from the database
-            int result = internalDatabase.dbQueryFirst(-1, "", user);
+            int result = internalDatabase.dbQueryFirst(-1, "", morphoUser);
 
             while (result == 0) {
-                // 0 indicates success in dbQueryFirst
-                users.add(user);
-                user = new MorphoUser();
-                result = internalDatabase.dbQueryNext(user);
+                // Convert MorphoUser to CustomMorphoUser
+                CustomMorphoUser customUser = mapMorphoUserToCustomMorphoUser(morphoUser);
+                users.add(customUser); // Add the custom user object to the list
+
+                morphoUser = new MorphoUser(); // Create a new instance for the next iteration
+                result = internalDatabase.dbQueryNext(morphoUser);
             }
         } catch (MorphoSmartException e) {
             // Handle MorphoSmartException
@@ -217,5 +239,19 @@ public class DatabaseManager {
         return users;
     }
 
+    private CustomMorphoUser mapMorphoUserToCustomMorphoUser(MorphoUser morphoUser) {
+        CustomMorphoUser customMorphoUser = new CustomMorphoUser();
+
+        // Map fields from MorphoUser to CustomMorphoUser
+        customMorphoUser.setStudentId(morphoUser.getUserID()); // Assuming getUserID() returns studentId
+        customMorphoUser.setStudentName(""); // You need to provide logic to retrieve student name
+        customMorphoUser.setClassId(""); // You need to provide logic to retrieve class id
+        customMorphoUser.setStatus(""); // You need to provide logic to retrieve status
+        customMorphoUser.setArrears(0); // You need to provide logic to retrieve arrears
+        customMorphoUser.setFingerprint1(new byte[0]); // You need to provide logic to retrieve fingerprint1
+        customMorphoUser.setFingerprint2(new byte[0]); // You need to provide logic to retrieve fingerprint2
+
+        return customMorphoUser;
+    }
 
 }
