@@ -11,7 +11,7 @@ public class CustomMorphoUser implements Cloneable {
     private byte[] fingerprint1;
     private byte[] fingerprint2;
 
-    public CustomMorphoUser(String studentId, String studentName, String classId, String status, double arrears, byte[] fingerprint1, byte[] fingerprint2) {
+    public CustomMorphoUser() {
         this.studentId = studentId;
         this.studentName = studentName;
         this.classId = classId;

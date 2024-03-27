@@ -188,10 +188,8 @@ public class FpSensorActivity extends BaseActivity {
             rootView.setKeepScreenOn(true);
             progressBar.setVisibility(View.VISIBLE);
             result_tv.setText("");
-
             // Capture the first fingerprint
             morphoDeviceCapture();
-
             // Schedule the second capture after a delay
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -203,21 +201,17 @@ public class FpSensorActivity extends BaseActivity {
                     }
                 }
             }, 8000); // Delay of 8 seconds
-
             // Update flag to indicate that the second capture is scheduled
             isSecondCaptureScheduled = true;
-
             capture_bt.setText(R.string.stop);
             verify_bt.setVisibility(View.GONE);
         } else if (capturing && deviceIsSet) {
             // Cancel the scheduled second capture if the stop button is clicked
             isSecondCaptureScheduled = false;
-
             rootView.setKeepScreenOn(false);
             morphoDevice = closeMorphoDevice(morphoDevice);
             capture_bt.setText(R.string.capture);
             verify_bt.setVisibility(View.VISIBLE);
-
             capturing = false;
             deviceIsSet = false;
         } else {
