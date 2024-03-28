@@ -1,8 +1,5 @@
 package com.example.biocapture;
 
-import android.os.Environment;
-import android.util.Log;
-
 import com.morpho.morphosmart.sdk.CustomInteger;
 import com.morpho.morphosmart.sdk.MorphoDatabase;
 import com.morpho.morphosmart.sdk.MorphoField;
@@ -10,7 +7,6 @@ import com.morpho.morphosmart.sdk.MorphoSmartException;
 import com.morpho.morphosmart.sdk.MorphoUser;
 import com.morpho.morphosmart.sdk.TemplateType;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +30,12 @@ public class DatabaseManager {
     // Method to obtain an existing MorphoDatabase instance
     public MorphoDatabase obtainExistingMorphoDatabase() throws MorphoSmartException {
         if (existingMorphoDatabaseInstance == null) {
-            throw new MorphoSmartException("Existing MorphoDatabase instance is null or not available.");
+            // If the instance is null, attempt to create or obtain it
+            existingMorphoDatabaseInstance = createOrObtainMorphoDatabase();
+            // If the instance is still null after attempted creation or obtainment, throw an exception
+            if (existingMorphoDatabaseInstance == null) {
+                throw new MorphoSmartException("Existing MorphoDatabase instance is null or not available.");
+            }
         }
         return existingMorphoDatabaseInstance;
     }
@@ -50,7 +51,7 @@ public class DatabaseManager {
     // Create Internal Database
     public MorphoDatabase createInternalDatabase() throws MorphoSmartException {
         // Define the maximum number of records, fingers per record, and field size based on your requirements
-        int maxRecords = 100; // Example value
+        int maxRecords = 1000; // Example value
         int maxFingersPerRecord = 2; // Example value
         int maxFieldSize = 1000; // Example value
 
@@ -63,9 +64,9 @@ public class DatabaseManager {
             throw new MorphoSmartException("Error creating internal database. Error code: " + result);
         }
 
-        // Get the path of the internal database
-        String databasePath = getDatabasePath(morphoDatabase);
-        Log.d(TAG, "Internal database created at: " + databasePath);
+//        // Get the path of the internal database
+//        String databasePath = getDatabasePath(morphoDatabase);
+//        Log.d(TAG, "Internal database created at: " + databasePath);
 
         // Define fields according to the table columns
         defineFields(morphoDatabase);
@@ -73,13 +74,13 @@ public class DatabaseManager {
         return morphoDatabase;
     }
 
-    private String getDatabasePath(MorphoDatabase morphoDatabase) {
-        // Use the MorphoSmart SDK to get the database path
-        // or use the Android file system APIs to determine the path
-        // based on the application's internal storage directory
-        File databaseFile = new File(Environment.getDataDirectory(), "data/biocapture/databases/morpho.db");
-        return databaseFile.getAbsolutePath();
-    }
+//    private String getDatabasePath(MorphoDatabase morphoDatabase) {
+//        // Use the MorphoSmart SDK to get the database path
+//        // or use the Android file system APIs to determine the path
+//        // based on the application's internal storage directory
+//        File databaseFile = new File(Environment.getDataDirectory(), "data/biocapture/databases/morpho.db");
+//        return databaseFile.getAbsolutePath();
+//    }
 
     // Define fields in the internal database based on table columns
     private void defineFields(MorphoDatabase morphoDatabase) {
